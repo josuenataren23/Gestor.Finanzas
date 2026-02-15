@@ -1,0 +1,65 @@
+﻿
+@{
+    ViewBag.Title = "Funciones";
+}
+
+<main class="min-h-screen w-full pt-16">
+    <header class="w-full h-fit py-24 flex flex-col text-center items-center
+    bg-gradient-to-t from-purple-950/30 to-slate-950">
+        <h1 class="text-white text-7xl font-bold">Funciones Principales de FinTrack</h1>
+        <p class="text-gray-400 text-2xl max-w-4xl">Descubre los cuatro pilares tecnológicos que transformarán tu relación con el
+        dinero y te darán el control absoluto de tus finanzas personales.</p>
+    </header>
+    <section class="grid gap-x-12 gap-y-24 grid-cols-2 py-24 px-24">
+        <!-- fila 1 -->
+        <div class="w-full h-80 bg-violet-600"></div><!--TODO: Reemplazar por imagen-->
+        <article class="w-full h-auto flex flex-col justify-around">
+            <h2 class="text-white text-4xl">Registro de Transacciones sin Esfuerzo</h2>
+            <p class="text-xl text-gray-400">Diseñado para la velocidad de la vida real. Nuestra interfaz
+            intuitiva elimina la fricción administrativa, permitiéndote registrar
+            gastos en segundos, ya sea manualmente o escaneando
+            recibos al instante.</p>
+            <p class="text-white text-xl font-semibold">Entrada de datos ultrarapida</p>
+            <p class="text-white text-xl font-semibold">Digitalización instantánea de recibos</p>
+        </article>
+        <!-- fila 2 -->
+        <article class="w-full h-auto flex flex-col justify-around">
+            <h2 class="text-white text-4xl">Categorización de Gastos</h2>
+            <p class="text-xl text-gray-400">Organiza tus gastos automáticamente en categorías predefinidas o crea tus propias categorías personalizadas para una visión clara de tus hábitos de consumo.</p>
+            <p class="text-white text-xl font-semibold">Personalización de etiquetas según tus hábitos</p>
+            <p class="text-white text-xl font-semibold">Identificación automática de suscripciones</p>
+        </article>
+        <div class="w-full h-80 bg-violet-600"></div><!--TODO: Reemplazar por imagen-->
+        <!-- fila 3 -->
+        <div class="w-full h-80 bg-violet-600"></div><!--TODO: Reemplazar por imagen-->
+        <article class="w-full h-auto flex flex-col justify-around">
+            <h2 class="text-white text-4xl">Visualización Total de Gastos</h2>
+            <p class="text-xl text-gray-400">No más números abstractos Gráficos de alto impacto y
+            resúmenes dinámicos que te dicen la verdad sobre tu dinero al
+            instante. Identifica fugas de capital y optimiza tu presupuesto
+            visualmente.</p>
+            <p class="text-white text-xl font-semibold">Gráficos de pastel y barras para análisis rápido</p>
+            <p class="text-white text-xl font-semibold">Desglose detallado de gastos por categoría</p>
+        </article>
+        <!-- fila 4 -->
+        <article class="w-full h-auto flex flex-col justify-around">
+            <h2 class="text-white text-4xl">Metas de Ahorro Personalizadas</h2>
+            <p class="text-xl text-gray-400">Convierte tus sueños en planes tangibles. Establece objetivos financieros claros y observa cómo te acercas a ellos con barras
+            de progreso motivadoras y notificaciones de hitos cumplidos.</p>
+            <p class="text-white text-xl font-semibold">Seguimiento visual del progreso</p>
+            <p class="text-white text-xl font-semibold">Reglas de ahorro personalizadas</p>
+        </article>
+        <div class="w-full h-80 bg-violet-600"></div><!--TODO: Reemplazar por imagen-->
+    </section>
+    <footer class="w-full  px-12 py-12">
+        <div class="w-full h-fit px-12 py-24 flex flex-col gap-4 justify-center items-center bg-gradient-to-br from-slate-950 via-purple-950 to-gray-950
+        rounded-xl border border-gray-800 shadow-sm">
+            <h2 class="text-white text-5xl font-bold text-center">Empieza a ahorrar hoy mismo</h2>
+            <p class="text-gray-400 text-center text-2xl max-w-2xl">Inicia tu viaje hacia una mejor gestión financiera con nuestras herramientas avanzadas de control.</p>
+            <div>
+                @Html.ActionLink("Crea tu cuenta", "Logout", "Account", new { @class = "flex  w-fit text-center bg-purple-500 rounded-md px-6 py-3 text-black font-semibold hover:bg-purple-600 transition-colors" })
+            </div>
+        </div >
+    </footer>
+</main>
+

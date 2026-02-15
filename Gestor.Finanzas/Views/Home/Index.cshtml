@@ -1,0 +1,59 @@
+﻿
+@{
+    ViewBag.Title = "Home";
+}
+
+<main class="min-h-screen max-w-full pt-8">
+    <header class="w-full h-screen  px-12 flex gap-12">
+        <div class="w-full md:w-1/2 h-screen flex flex-col justify-center">
+            <h1 class="text-white text-6xl font-bold">Toma el Control de tus Gastos Diarios con Facilidad</h1>
+            <p class="text-white/75 mt-6 text-lg">
+                Fomenta tu conciencia financiera con un seguimiento sencillo y efectivo de tus gastos diarios. Entiende a dónde va tu dinero y toma decisiones informadas para mejorar tu salud financiera.
+            </p>
+            <div class="w-full flex">
+                @Html.ActionLink("Comienza Ahora", "Logout", "Account", new { @class = "mt-8 bg-purple-500 rounded-md px-6 py-3 text-black font-semibold hover:bg-purple-600 transition-colors" })
+            </div>
+        </div>
+        <div class="w-1/2 h-screen  hidden md:flex justify-end items-center">
+            <img src="~/Content/assets/hero.png" alt="Hero Image" class="w-full h-auto object-cover rounded-md shadow-lg shadow-purple-500/25">
+        </div>
+        
+    </header>
+    <section class="w-full h-fit flex flex-col justify-center items-center px-12 gap-12">
+        <div class="max-w-4xl flex flex-col items-center text-center space-y-6">
+            <h2 class="text-5xl text-white font-semibold">¿Por qué necesitas un mejor control de gastos?</h2>
+            <p class="text-white/75 max-w-3xl">Administrar el dinero no debería ser una lucha. Te ayudamos a superar los dolores de cabeza financieros mas comunes con una solución simple y eficaz.</p>
+        </div>
+        <div class="w-full h-fit flex flex-col md:flex-row gap-8">
+            <article class="w-full px-8 py-6 bg-purple-950/75 backdrop-blur-md rounded-md ">
+                <div class="flex w-12 h-12 justify-center bg-purple-500/25 rounded-md items-center">
+                    <i class="fa-solid fa-eye-slash text-2xl text-purple-500"></i>
+                </div>
+                <h3 class="text-2xl text-white font-semibold mt-4">Falta de Conciencia</h3>
+                <p class="text-white/75 mt-2">Deja de permitir que las pequeñas compras diarias pasen desapercibidas. Conoce exactamente a dónde va tu dinero.</p>
+            </article>
+            <article class="w-full px-8 py-6 bg-purple-950/75 backdrop-blur-md rounded-md">
+                <div class="flex w-12 h-12 justify-center bg-purple-500/25 rounded-md items-center">
+                    <i class="fa-solid fa-arrow-trend-down text-2xl text-purple-500"></i>
+                </div>
+                <h3 class="text-2xl text-white font-semibold mt-4">Deuda Creciente</h3>
+                <p class="text-white/75 mt-2">Identificar patrones de gastos tóxicos y fugas presupuestarias antes de que se conviertan en deudas a largo plazo.</p>
+            </article>
+            <article class="w-full px-8 py-6 bg-purple-950/75 backdrop-blur-md rounded-md">
+                <div class="flex w-12 h-12 justify-center bg-purple-500/25 rounded-md items-center">
+                    <i class="fa-solid fa-file-arrow-up text-2xl text-purple-500"></i>
+                </div>
+                <h3 class="text-2xl text-white font-semibold mt-4">Registros Desorganizados</h3>
+                <p class="text-white/75 mt-2">Sustituye las hojas de cálculo confusas y recibos amontonados por un sistema de registro claro y fácil de mantener.</p>
+            </article>
+        </div>
+    </section>
+    <section class="w-full h-fit px-12 py-24 flex justify-center items-center">
+        <div class="w-4/5 h-fit px-14 py-8 bg-purple-950/75 backdrop-blur-md flex flex-col justify-center items-center rounded-md text-center space-y-6 mb-16">
+            <h2 class="text-white text-5xl font-semibold max-w-3xl">¿Listo para cambiar tu relación con el dinero?</h2>
+            <p class="text-white/75 text-xl max-w-xl">Empieza hoy mismo y descubre la tranquilidad que viene con un control financiero efectivo.</p>
+            @Html.ActionLink("Comienza Ahora", "Logout", "Account", new { @class = "mt-8 bg-purple-500 rounded-md px-6 py-3 text-black font-semibold hover:bg-purple-600 transition-colors" })
+        </div>
+    </section>
+</main>
+

@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Fintrack - Control de Gastos Diarios" />
+    <meta property="og:description" content="Administra tus finanzas personales de forma simple y segura con Fintrack." />
+    <meta property="og:image" content="@($"{Request.Url.Scheme}://{Request.Url.Authority}{Url.Content("~/Content/assets/hero.png")}")" />
+    <link rel="canonical" href="@Request.Url.AbsoluteUri" />
+
+    <title>@ViewBag.Title - Fintrack</title>
+
+    <meta name="description" content="Fintrack es tu aliado definitivo para el control de gastos diarios." />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/fontawesome/css/all.min.css" />
+</head>
+<body class="bg-gradient-to-t from-purple-950 via-gray-950 to-slate-950 min-h-screen">
+    <header class="w-full h-16 fixed flex justify-between items-center text-white px-16 border-b border-gray-800 bg-black/50 backdrop-blur-md z-10">
+        <div>
+            <h2 class="flex items-center gap-4"><i class="fa-solid fa-coins text-purple-500"></i> Fintrack</h2>
+        </div>
+        <nav id="mainNav" class="w-full md:w-fit hidden md:flex absolute left-0 md:relative mt-16 md:bg-transparent md:mt-0 md:gap-6">
+            <div class="flex gap-4 flex-col md:flex-row items-center w-full md:w-auto px-4 py-6 md:p-0 absolute md:relative left-0 top-full bg-black/90 md:bg-transparent">
+                @Html.ActionLink("Inicio", "Index", "Home", null, new { @class = "text-white/75 hover:text-white" })
+                @Html.ActionLink("Funciones", "Funciones", "Funciones", null, new { @class = "text-white/75 hover:text-white" })
+                @Html.ActionLink("Panel", "Index", "Dashboard", null, new { @class = "text-white/75 hover:text-white" })
+                @Html.ActionLink("Soporte", "Index", "Soporte", null, new { @class = "text-white/75 hover:text-white" })
+            </div>
+        </nav>
+        <div class="bg-purple-500 rounded-md px-2 py-1 hover:bg-purple-700 transition-colors hidden md:block">
+            @Html.ActionLink("Empezar Ahora", "Logout", "Account", null, new { @class = "text-black font-semibold" })
+
+        </div>
+        <button id="bars" class="md:hidden text-white focus:outline-none">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </header>
+    @RenderBody()
+    <footer class="w-full h-fit px-14 py-8 bg-slate-900 border-t border-gray-800 mt-16">
+        <div class="w-full flex justify-between">
+            <section class="w-1/5">
+                <h2 class="flex items-center gap-2 text-white"><i class="fa-solid fa-money-bills text-purple-500"></i>FinTrack</h2>
+                <p class="text-white/75">Empoderando a las personas para dominar sus finanzas personales a traves de herramientas intuitivas y personalizadas.</p>
+            </section>
+                <nav class="w-4/5 flex justify-end items-end">
+                    <div class="flex gap-6">
+                        @Html.ActionLink("Inicio", "Index", "Home", null, new { @class = "text-white/75 hover:text-white" })
+                        @Html.ActionLink("Funciones", "Funciones", "Funciones", null, new { @class = "text-white/75 hover:text-white" })
+                        @Html.ActionLink("Panel", "Index", "Dashboard", null, new { @class = "text-white/75 hover:text-white" })
+                        @Html.ActionLink("Soporte", "Index", "Soporte", null, new { @class = "text-white/75 hover:text-white" })
+                    </div>
+                </nav>
+        </div>
+        <hr class="my-6 border-gray-800" />
+        <div>
+            <p class="text-center text-white/50">&copy; @DateTime.Now.Year Fintrack. Todos los derechos reservados.</p>
+        </div>
+    </footer>   
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script>
+        const bars = document.getElementById('bars');
+        const mainNav = document.getElementById('mainNav');
+        // Toggle del menú al hacer clic en el ícono de barras
+        bars.addEventListener('click', () => {
+            mainNav.classList.toggle('hidden');
+        });
+        // Cerrar el menú al hacer clic en un otra parte de la página
+        document.addEventListener('click', (event) => {
+            if (!mainNav.contains(event.target) && !bars.contains(event.target)) {
+                mainNav.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
