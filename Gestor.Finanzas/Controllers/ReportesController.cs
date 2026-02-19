@@ -6,9 +6,9 @@ using System.Web.Mvc;
 
 namespace Gestor.Finanzas.Controllers
 {
-    public class FuncionesController : Controller
+    public class ReportesController : Controller
     {
-        // GET: Funciones
+        // GET: Reportes
         public ActionResult Index()
         {
             return View();
