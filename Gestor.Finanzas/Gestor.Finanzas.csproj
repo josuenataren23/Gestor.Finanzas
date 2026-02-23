@@ -121,6 +121,7 @@
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\FuncionesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MetasController.cs" />
     <Compile Include="Controllers\PresupuestosController.cs" />
     <Compile Include="Controllers\ReportesController.cs" />
     <Compile Include="Controllers\SoporteController.cs" />
@@ -156,6 +157,7 @@
     <Content Include="Views\Transacciones\Index.cshtml" />
     <Content Include="Views\Presupuestos\Index.cshtml" />
     <Content Include="Views\Reportes\Index.cshtml" />
+    <Content Include="Views\Metas\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

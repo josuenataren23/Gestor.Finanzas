@@ -16,28 +16,34 @@
 
             <nav>
                 <ul class="flex flex-col  mt-16">
-                    
+
                     <li class="flex px-2  items-center gap-2 rounded-md hover:bg-purple-500 dark:hover:bg-purple-700/50
                     @Html.IsCurrent("Dashboard", "Index")">
                         <i class="fa-solid fa-rectangle-list"></i>
-                        @Html.ActionLink("Resumen", "Index", "Dashboard", null, new {@class = "w-full py-4"})
+                        @Html.ActionLink("Resumen", "Index", "Dashboard", null, new { @class = "w-full py-4" })
                     </li>
                     <li class="flex px-2  items-center gap-2 hover:hover:bg-purple-500 dark:hover:bg-purple-700/50 rounded-md
                     @Html.IsCurrent("Transacciones", "Index")">
                         <i class="fa-solid fa-receipt"></i>
-                        @Html.ActionLink("Transacciones", "Index", "Transacciones", null, new {@class = "w-full py-4"})
+                        @Html.ActionLink("Transacciones", "Index", "Transacciones", null, new { @class = "w-full py-4" })
                     </li>
                     <li class="flex px-2  items-center gap-2 hover:hover:bg-purple-500 dark:hover:bg-purple-700/50 rounded-md
                     @Html.IsCurrent("Presupuestos", "Index")">
                         <i class="fa-solid fa-wallet"></i>
 
-                        @Html.ActionLink("Presupuestos", "Index", "Presupuestos", null, new {@class = "w-full py-4"})
+                        @Html.ActionLink("Presupuestos", "Index", "Presupuestos", null, new { @class = "w-full py-4" })
+                    </li>
+                    <li class="flex px-2  items-center gap-2 hover:hover:bg-purple-500 dark:hover:bg-purple-700/50 rounded-md
+                    @Html.IsCurrent("Metas", "Index")">
+                        <i class="fa-solid fa-piggy-bank"></i>
+
+                        @Html.ActionLink("Metas", "Index", "Metas", null, new { @class = "w-full py-4" })
                     </li>
                     <li class="flex px-2  items-center gap-2 hover:hover:bg-purple-500 dark:hover:bg-purple-700/50 rounded-md
                     @Html.IsCurrent("Reportes", "Index")">
                         <i class="fa-solid fa-chart-column"></i>
 
-                        @Html.ActionLink("Reportes", "Index", "Reportes", null, new {@class = "w-full py-4"})
+                        @Html.ActionLink("Reportes", "Index", "Reportes", null, new { @class = "w-full py-4" })
                     </li>
                 </ul>
                 
