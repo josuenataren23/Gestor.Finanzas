@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace Gestor.Finanzas.Controllers
 {
-    public class TransaccionesController : Controller
+    public class TransaccionesController : BaseController
     {
         // GET: Transacciones
         public ActionResult Index()

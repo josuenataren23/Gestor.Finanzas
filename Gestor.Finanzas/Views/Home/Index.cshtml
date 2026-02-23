@@ -11,7 +11,7 @@
                 Fomenta tu conciencia financiera con un seguimiento sencillo y efectivo de tus gastos diarios. Entiende a dónde va tu dinero y toma decisiones informadas para mejorar tu salud financiera.
             </p>
             <div class="w-full flex">
-                @Html.ActionLink("Comienza Ahora", "Logout", "Account", new { @class = "mt-8 bg-purple-500 rounded-md px-6 py-3 text-black font-semibold hover:bg-purple-600 transition-colors" })
+                @Html.ActionLink("Comienza Ahora", "Logout", "Account",null, new { @class = "mt-8 bg-purple-500 rounded-md px-6 py-3 text-black font-semibold hover:bg-purple-600 transition-colors" })
             </div>
         </div>
         <div class="w-1/2 md:h-screen  hidden md:flex justify-end items-center">
@@ -52,7 +52,7 @@
         <div class="w-4/5 h-fit md:px-14 py-8 bg-purple-950/75 backdrop-blur-md flex flex-col justify-center items-center rounded-md text-center space-y-6 mb-16">
             <h2 class="text-white text-5xl font-semibold max-w-3xl">¿Listo para cambiar tu relación con el dinero?</h2>
             <p class="text-white/75 text-xl max-w-xl">Empieza hoy mismo y descubre la tranquilidad que viene con un control financiero efectivo.</p>
-            @Html.ActionLink("Comienza Ahora", "Logout", "Account", new { @class = "mt-8 bg-purple-500 rounded-md px-6 py-3 text-black font-semibold hover:bg-purple-600 transition-colors" })
+            @Html.ActionLink("Comienza Ahora", "Login", "Account", null, new { @class = "mt-8 bg-purple-500 rounded-md px-6 py-3 text-black font-semibold hover:bg-purple-600 transition-colors" })
         </div>
     </section>
 </main>

@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Fintrack - Control de Gastos Diarios" />
+    <meta property="og:description" content="Administra tus finanzas personales de forma simple y segura con Fintrack." />
+    <meta property="og:image" content="@($"{Request.Url.Scheme}://{Request.Url.Authority}{Url.Content("~/Content/assets/hero.png")}")" />
+    <link rel="canonical" href="@Request.Url.AbsoluteUri" />
+
+    <title>@ViewBag.Title - Fintrack</title>
+
+    <meta name="description" content="Fintrack es tu aliado definitivo para el control de gastos diarios." />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/fontawesome/css/all.min.css" />
+</head>
+<body class="bg-black min-h-screen">
+    
+    @RenderBody()
+    
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    
+</body>
+</html>
+
