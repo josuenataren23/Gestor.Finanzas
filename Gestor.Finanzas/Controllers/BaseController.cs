@@ -6,8 +6,13 @@ public class BaseController : Controller
     {
         if (Session["UsuarioId"] == null)
         {
-            filterContext.Result =
-                new RedirectResult("~/Account/Login");
+            filterContext.Result = new RedirectToRouteResult(
+                new System.Web.Routing.RouteValueDictionary
+                {
+                    { "controller", "Account" },
+                    { "action", "Login" }
+                }
+            );
         }
 
         base.OnActionExecuting(filterContext);

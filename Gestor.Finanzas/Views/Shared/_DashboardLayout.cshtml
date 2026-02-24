@@ -10,84 +10,111 @@
 <body class="dark:bg-slate-950 dark:text-slate-100">
     <div class="grid grid-cols-[260px_1fr] grid-rows-[64px_1fr] h-screen">
 
-        <aside class="row-span-2 dark:bg-slate-900 border-r border-slate-800">
-        <div class="w-full flex flex-col p-4">
-            <h1 class="text-2xl"><i class="fa-solid fa-coins text-purple-700 dark:text-purple-500"></i> FinTrack</h1>
+        <aside class="row-span-2 dark:bg-slate-900 border-r border-slate-800 flex flex-col h-screen justify-between">
+            <div class="w-full flex flex-col p-4">
+                <h1 class="text-2xl"><i class="fa-solid fa-coins text-purple-700 dark:text-purple-500"></i> FinTrack</h1>
 
-            <nav>
-                <ul class="flex flex-col  mt-16">
+                <nav>
+                    <ul class="flex flex-col  mt-16">
 
-                    <li class="flex px-2  items-center gap-2 rounded-md hover:bg-purple-500 dark:hover:bg-purple-700/50
+                        <li class="flex px-2  items-center gap-2 rounded-md hover:bg-purple-500 dark:hover:bg-purple-700/50 transition-colors duration-300
                     @Html.IsCurrent("Dashboard", "Index")">
-                        <i class="fa-solid fa-rectangle-list"></i>
-                        @Html.ActionLink("Resumen", "Index", "Dashboard", null, new { @class = "w-full py-4" })
-                    </li>
-                    <li class="flex px-2  items-center gap-2 hover:hover:bg-purple-500 dark:hover:bg-purple-700/50 rounded-md
+                            <i class="fa-solid fa-rectangle-list"></i>
+                            @Html.ActionLink("Resumen", "Index", "Dashboard", null, new { @class = "w-full py-4" })
+                        </li>
+                        <li class="flex px-2  items-center gap-2 hover:bg-purple-500 dark:hover:bg-purple-700/50 rounded-md transition-colors duration-300
                     @Html.IsCurrent("Transacciones", "Index")">
-                        <i class="fa-solid fa-receipt"></i>
-                        @Html.ActionLink("Transacciones", "Index", "Transacciones", null, new { @class = "w-full py-4" })
-                    </li>
-                    <li class="flex px-2  items-center gap-2 hover:hover:bg-purple-500 dark:hover:bg-purple-700/50 rounded-md
+                            <i class="fa-solid fa-receipt"></i>
+                            @Html.ActionLink("Transacciones", "Index", "Transacciones", null, new { @class = "w-full py-4" })
+                        </li>
+                        <li class="flex px-2  items-center gap-2 hover:bg-purple-500 dark:hover:bg-purple-700/50 rounded-md transition-colors duration-300
                     @Html.IsCurrent("Presupuestos", "Index")">
-                        <i class="fa-solid fa-wallet"></i>
+                            <i class="fa-solid fa-wallet"></i>
 
-                        @Html.ActionLink("Presupuestos", "Index", "Presupuestos", null, new { @class = "w-full py-4" })
-                    </li>
-                    <li class="flex px-2  items-center gap-2 hover:hover:bg-purple-500 dark:hover:bg-purple-700/50 rounded-md
+                            @Html.ActionLink("Presupuestos", "Index", "Presupuestos", null, new { @class = "w-full py-4" })
+                        </li>
+                        <li class="flex px-2  items-center gap-2 hover:bg-purple-500 dark:hover:bg-purple-700/50 rounded-md transition-colors duration-300
                     @Html.IsCurrent("Metas", "Index")">
-                        <i class="fa-solid fa-piggy-bank"></i>
+                            <i class="fa-solid fa-piggy-bank"></i>
 
-                        @Html.ActionLink("Metas", "Index", "Metas", null, new { @class = "w-full py-4" })
-                    </li>
-                    <li class="flex px-2  items-center gap-2 hover:hover:bg-purple-500 dark:hover:bg-purple-700/50 rounded-md
+                            @Html.ActionLink("Metas", "Index", "Metas", null, new { @class = "w-full py-4" })
+                        </li>
+                        <li class="flex px-2  items-center gap-2 hover:bg-purple-500 dark:hover:bg-purple-700/50 rounded-md transition-colors duration-300
                     @Html.IsCurrent("Reportes", "Index")">
-                        <i class="fa-solid fa-chart-column"></i>
+                            <i class="fa-solid fa-chart-column"></i>
 
-                        @Html.ActionLink("Reportes", "Index", "Reportes", null, new { @class = "w-full py-4" })
-                    </li>
-                </ul>
-                
-                <ul class="flex flex-col mt-4 border-t border-t-gray-600 py-4">
-                    <li class="flex px-2 py-4 items-center gap-2 hover:hover:bg-purple-500 dark:hover:bg-purple-700/50 rounded-md
+                            @Html.ActionLink("Reportes", "Index", "Reportes", null, new { @class = "w-full py-4" })
+                        </li>
+                    </ul>
+
+                    <ul class="flex flex-col mt-4 border-t border-t-gray-600 py-4">
+                        <li class="flex px-2 py-4 items-center gap-2 hover:hover:bg-purple-500 dark:hover:bg-purple-700/50 rounded-md
                     @Html.IsCurrent("Configuracion", "Index")">
-                        <i class="fa-solid fa-gear"></i>
-                        @Html.ActionLink("Configuración", "Index", "Configuracion", null, new {@class = ""})
-                    </li>
-                    
+                            <i class="fa-solid fa-gear"></i>
+                            @Html.ActionLink("Configuración", "Index", "Configuracion", null, new { @class = "" })
+                        </li>
 
-                </ul>
-            </nav>
-        </div>
+
+                    </ul>
+                </nav>
+            </div>
+            <div class="w-full flex items-center justify-between px-4 py-2 border-t border-slate-800">
+                <img src="@(string.IsNullOrEmpty(Session["UsuarioFoto"] as string) 
+                ? Url.Content("~/Content/assets/userdefault.png") 
+                : Session["UsuarioFoto"] as string)"
+                alt="Foto de perfil"
+                class="w-10 h-10 rounded-full object-cover" />
+
+                <span>@Session["UsuarioNombre"]</span>
+            </div>
         </aside>
-    
-         @RenderBody()
-        
+
+        @RenderBody()
+
     </div>
 
     <script>
-    const html = document.documentElement;
-    const button = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        const button = document.getElementById('theme-toggle');
 
-    // Tema por defecto: oscuro
-    const savedTheme = localStorage.getItem('theme');
+        // Tema por defecto: oscuro
+        const savedTheme = localStorage.getItem('theme');
 
-    if (savedTheme === 'light') {
-        html.classList.remove('dark');
-    } else {
-        html.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-    }
-
-    button.addEventListener('click', () => {
-        html.classList.toggle('dark');
-
-        if (html.classList.contains('dark')) {
-            localStorage.setItem('theme', 'dark');
+        if (savedTheme === 'light') {
+            html.classList.remove('dark');
         } else {
-            localStorage.setItem('theme', 'light');
+            html.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
         }
-    });
-</script>
+
+        button.addEventListener('click', () => {
+            html.classList.toggle('dark');
+
+            if (html.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+
+
+        //funcion para mostrar el modal de cerrar sesion
+        function ModalSession() {
+            const modal = document.getElementById('modal-session');
+            const backdrop = modal.querySelector('.fixed');
+
+            modal.classList.remove('hidden');
+            backdrop.classList.remove('hidden');
+
+            backdrop.addEventListener('click', () => {
+                modal.classList.add('hidden');
+                backdrop.classList.add('hidden');
+            });
+        }
+            
+
+    </script>
 
 </body>
 </html>

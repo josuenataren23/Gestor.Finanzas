@@ -120,8 +120,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\assets\google.svg" />
     <Content Include="Content\assets\hero.png" />
     <Content Include="Content\assets\shotsFinTrack.png" />
+    <Content Include="Content\assets\userdefault.png" />
     <Content Include="Content\fontawesome\css\all.css" />
     <Content Include="Content\fontawesome\css\all.min.css" />
     <Content Include="Content\fontawesome\css\brands.css" />

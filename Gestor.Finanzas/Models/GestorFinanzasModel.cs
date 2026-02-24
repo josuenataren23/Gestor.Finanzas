@@ -8,7 +8,7 @@ namespace Gestor.Finanzas.Models
     public partial class GestorFinanzasModel : DbContext
     {
         public GestorFinanzasModel()
-            : base("name=FinanzasModel")
+            : base("name=GestorFinanzasModel")
         {
         }
 

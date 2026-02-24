@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
-namespace Gestor.Finanzas.Controllers
+public class DashboardController : BaseController
 {
-    public class DashboardController : BaseController
+    public ActionResult Index()
     {
-        // GET: Dashboard
-        public ActionResult Index()
-        {
-            return View();
-        }
+        ViewBag.Nombre = Session["UsuarioNombre"];
+        ViewBag.Foto = Session["UsuarioFoto"];
+        return View();
     }
 }

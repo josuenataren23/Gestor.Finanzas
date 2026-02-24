@@ -16,7 +16,8 @@ namespace Gestor.Finanzas.Models
             Transacciones = new HashSet<Transaccione>();
         }
 
-        public int id { get; set; }
+        [Column("id")]
+        public int Id { get; set; }
 
         [Required]
         [StringLength(100)]
@@ -41,3 +42,19 @@ namespace Gestor.Finanzas.Models
         public virtual ICollection<Transaccione> Transacciones { get; set; }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

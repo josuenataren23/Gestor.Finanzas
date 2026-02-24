@@ -4,5 +4,28 @@
     ViewBag.Title = "Login";
 }
 
+<main class="w-full min-h-screen flex flex-col justify-center items-center text-white gap-8">
+    <section class="flex flex-col items-center justify-center gap-2">
+        <div class="p-4 bg-violet-600 rounded-md">
+            <i class="fa-solid fa-money-bill-wave text-xl"></i>
+        </div>
+        <h2 class="font-medium text-2xl">FinTrack</h2>
+    </section>
+    <section class="w-fit h-fit flex flex-col justify-center items-center gap-8 shadow shadow-violet-600/50 py-8 px-12 rounded-md ">
+        <div class="flex flex-col items-center">
+            <h1 class="text-3xl font-semibold">Iniciar Sesión</h1>
+            <p class="text-gray-400 max-w-xs text-center">Gestiona tus finanzas de forma inteligente y segura en un solo lugar</p>
+        </div>
+        <a href="@Url.Action("GoogleLogin", "Account")"
+        class="w-full bg-white py-2 flex justify-center items-center gap-2 rounded-md text-lg font-semibold">
+            <img src="~/Content/assets/google.svg" alt="Google Logo" width="20" height="20" />
+            <p class="text-black">Iniciar sesión con Google</p>
+        </a>
+    </section>
+    <section>
+        <p class="max-w-sm text-center">Al continuar, aceptas nuestros <a href="" class="text-violet-600">Términos y Condiciones</a> y nuestra Politica de privacidad</p>
+    </section>
+</main>
+
 
 

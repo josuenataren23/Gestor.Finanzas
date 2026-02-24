@@ -9,7 +9,10 @@ using System.Web.Mvc;
 public class AccountController : Controller
 {
     private GestorFinanzasModel db = new GestorFinanzasModel();
-    // Vista Login
+
+    // ===============================
+    // VISTA LOGIN
+    // ===============================
     public ActionResult Login()
     {
         if (Session["UsuarioId"] != null)
@@ -18,7 +21,9 @@ public class AccountController : Controller
         return View();
     }
 
-    // Inicia login con Google
+    // ===============================
+    // INICIAR LOGIN CON GOOGLE
+    // ===============================
     public ActionResult GoogleLogin()
     {
         var properties = new AuthenticationProperties
@@ -27,12 +32,15 @@ public class AccountController : Controller
         };
 
         HttpContext.GetOwinContext()
-            .Authentication.Challenge(properties, "Google");
+            .Authentication
+            .Challenge(properties, "Google");
 
         return new HttpUnauthorizedResult();
     }
 
-    // Respuesta de Google
+    // ===============================
+    // RESPUESTA DE GOOGLE
+    // ===============================
     public ActionResult GoogleResponse()
     {
         var auth = HttpContext.GetOwinContext().Authentication;
@@ -41,10 +49,15 @@ public class AccountController : Controller
         if (identity == null)
             return RedirectToAction("Login");
 
+        // Claims principales
         string email = identity.FindFirst(ClaimTypes.Email)?.Value;
         string nombre = identity.FindFirst(ClaimTypes.Name)?.Value;
         string foto = identity.FindFirst("urn:google:picture")?.Value;
 
+        if (string.IsNullOrEmpty(email))
+            return RedirectToAction("Login");
+
+        // Buscar usuario
         var usuario = db.Usuarios.FirstOrDefault(u => u.Email == email);
 
         if (usuario == null)
@@ -53,31 +66,56 @@ public class AccountController : Controller
             {
                 Nombre = nombre,
                 Email = email,
-                FotoPerfilUrl = foto,
                 FechaRegistro = DateTime.Now
             };
 
             db.Usuarios.Add(usuario);
-            db.SaveChanges();
         }
 
-        // Crear sesión
-        Session["UsuarioId"] = usuario.id;
+        // Actualizar datos SIEMPRE
+        usuario.Nombre = nombre;
+        usuario.FotoPerfilUrl = foto;
+
+        db.SaveChanges();
+
+        // ===============================
+        // CREAR SESIÓN
+        // ===============================
+        Session["UsuarioId"] = usuario.Id;
         Session["UsuarioNombre"] = usuario.Nombre;
         Session["UsuarioFoto"] = usuario.FotoPerfilUrl;
 
         return RedirectToAction("Index", "Dashboard");
     }
 
-    // Logout
+    // ===============================
+    // LOGOUT
+    // ===============================
     public ActionResult Logout()
     {
         Session.Clear();
         Session.Abandon();
 
         HttpContext.GetOwinContext()
-            .Authentication.SignOut();
+            .Authentication
+            .SignOut("ExternalCookie");
 
         return RedirectToAction("Login");
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
