@@ -3,18 +3,42 @@
     ViewBag.Title = "Soporte";
 }
 
-<main class="min-h-screen pt-12">
-    <header class="relative py-24 text-center overflow-hidden bg-gradient-to-t from-purple-950 via-gray-950 to-slate-950">
+<main class="min-h-screen max-w-full">
+    <header class="relative py-32 text-center overflow-hidden bg-gradient-to-t from-purple-950/70 via-gray-950 to-slate-950">
         <div class="w-full h-fit">
-            <h1 class="text-white text-5xl font-bold">Centro de Soporte</h1>
-            <p class="text-gray-500 text-2xl">¿En qué podemos ayudarte hoy? Busca en nuestra base de conocimiento o explora los temas de ayuda.</p>
+            <h1 class="text-violet-200 text-7xl font-bold">Centro de Soporte</h1>
+            <p class="text-gray-500 text-xl my-12">¿En qué podemos ayudarte hoy? Busca en nuestra base de conocimiento o explora los temas de ayuda.</p>
         </div>
         <div>
-            <input type="text" placeholder="Buscar en el centro de soporte..." />
+            <input type="text" placeholder="¿Cómo podemos ayudarte?" class="shadow-sm focus:outline-none focus:ring-1 w-1/2 p-5 rounded-lg bg-gray-900 text-white placeholder-gray-500  focus:ring-purple-400" />
         </div>
         <div>
-            <p>Búsquedas populares: <a href="#">configurar cuenta</a> | <a href="#">Exportar Excel</a> | <a href="#">Sincronozación bancaria</a></p>
+            <p class="text-white/60 text-sm font-light mt-14">Búsquedas populares: <a class="text-purple-400/80 mt-16" href="#">configurar cuenta   -</a> <a class="text-purple-400/80" href="#">   Exportar Excel   -</a> <a class="text-purple-400/80" href="#">Sincronozación bancaria</a></p>
         </div>
+       
     </header>
+     <section class="w-full h-fit flex justify-center items-center py-20 px-12">
+            <div class="w-full h-fit flex max-md:flex-col gap-12">
+                <article class="border-gray-800 border-2 rounded-xl bg-gray-950 p-10 max-md:w-full max-md:h-80 md:size-80">
+                    <div class="w-fit p-2 bg-gradient-to-br from-purple-900/80 to-violet-900/40 rounded-md text-xl text-purple-500">
+                        <i class="fa-solid fa-rocket"></i>
+                    </div>
+                    <h3 class="text-white text-2xl my-3">Primeros Pasos</h3>
+                    <p class="text-gray-400">Arepnde a configurar tu cuenta y realizar tus primeros registros de gastos.</p>
+                </article>
+                <article class="border-gray-800 border-2 rounded-xl bg-gray-950 p-10 w-full h-80 md:size-80">
+                    <h3 class="text-white text-2xl my-3">Gestión de Cuentas</h3>
+                    <p class="text-gray-400">Administra tus suscripciones, vincula bancos y gestiona tu perfil de usuario.</p>
+                </article>
+                <article class="border-gray-800 border-2 rounded-xl bg-gray-950 p-10 w-full h-80 md:size-80">
+                    <h3 class="text-white text-2xl my-3">Seguridad y Privacidad</h3>
+                    <p class="text-gray-400">Información sobre encriptación de datos 2FA y cómo protegemos tus finanzas.</p>
+                </article>
+                <article class="border-gray-800 border-2 rounded-xl bg-gray-950 p-10 w-full h-80 md:size-80">
+                    <h3 class="text-white text-2xl my-3">Problemas Técnicos</h3>
+                    <p class="text-gray-400">Soluciones a erroes comunes, problemas de sincronización y bugs conocidos.</p>
+                </article>
+            </div>
+        </section>
 </main>
 
