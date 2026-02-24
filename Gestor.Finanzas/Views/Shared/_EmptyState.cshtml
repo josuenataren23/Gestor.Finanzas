@@ -1,0 +1,29 @@
+﻿ @model Gestor.Finanzas.Models.ViewModels.EmptyStateViewModel
+
+
+    <div class="flex flex-col items-center justify-center h-full text-center px-6">
+
+        <div class="w-20 h-20 flex items-center justify-center rounded-full
+                bg-purple-600/20 text-purple-400 mb-6">
+            <i class="@Model.IconClass text-3xl"></i>
+        </div>
+
+        <h2 class="text-2xl font-semibold text-white mb-2">
+            @Model.Title
+        </h2>
+
+        <p class="text-gray-400 max-w-md mb-6">
+            @Model.Description
+        </p>
+
+        @if (!string.IsNullOrEmpty(Model.ActionUrl))
+        {
+            <a href="@Model.ActionUrl"
+               class="px-6 py-3 rounded-lg bg-purple-600 hover:bg-purple-700
+                  text-white font-medium transition">
+                @Model.ActionText
+            </a>
+        }
+
+    </div>
+

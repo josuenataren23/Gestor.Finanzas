@@ -158,6 +158,7 @@
     <Compile Include="Models\Presupuesto.cs" />
     <Compile Include="Models\Transaccione.cs" />
     <Compile Include="Models\Usuario.cs" />
+    <Compile Include="Models\ViewModels\EmptyStateViewModel.cs" />
     <Compile Include="Startup.Auth.cs" />
     <Content Include="App_Code\HtmlHelpers.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -203,6 +204,7 @@
     <Content Include="Views\Metas\Index.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\LoginLayout.cshtml" />
+    <Content Include="Views\Shared\_EmptyState.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

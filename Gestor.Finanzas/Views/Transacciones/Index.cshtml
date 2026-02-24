@@ -2,11 +2,25 @@
 @{
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
     ViewBag.Title = "Transacciones";
+    var empty = ViewBag.EmptyState as Gestor.Finanzas.Models.ViewModels.EmptyStateViewModel;
+
 }
 
 <header class="dark:bg-slate-900 border-b border-slate-800">
 </header>
 
 <main class="overflow-y-auto p-6 ">
-            
+    
+
+    @if (empty != null)
+    {
+        @Html.Partial("_EmptyState", empty)
+    }
+    else
+    {
+        <!-- DASHBOARD NORMAL -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- cards -->
+        </div>
+    }
 </main>
