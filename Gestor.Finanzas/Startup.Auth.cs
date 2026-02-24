@@ -3,8 +3,10 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
+using System.Configuration;
 using System.Security.Claims;
 using System.Threading.Tasks;
+
 
 [assembly: OwinStartup(typeof(Gestor.Finanzas.Startup))]
 
@@ -24,8 +26,8 @@ namespace Gestor.Finanzas
 
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions
             {
-                ClientId = ConfigurationManager.AppSettings["GoogleClientId"],
-                ClientSecret = ConfigurationManager.AppSettings["GoogleClientSecret"],
+                ClientId = ConfigurationManager.AppSettings["Google:ClientId"],
+                ClientSecret = ConfigurationManager.AppSettings["Google:ClientSecret"],
                 CallbackPath = new PathString("/signin-google"),
                 Scope = { "email", "profile" },
                 Provider = new GoogleOAuth2AuthenticationProvider
