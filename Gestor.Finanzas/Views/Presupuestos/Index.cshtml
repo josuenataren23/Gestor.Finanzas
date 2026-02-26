@@ -1,24 +1,171 @@
-﻿
+﻿@model IEnumerable<Gestor.Finanzas.Models.Presupuesto>
 @{
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
     ViewBag.Title = "Presupuestos";
+
     var empty = ViewBag.EmptyState as Gestor.Finanzas.Models.ViewModels.EmptyStateViewModel;
+    decimal totalObj = (decimal)(ViewBag.TotalObjetivo ?? 0m);
+    decimal totalGast = (decimal)(ViewBag.TotalGastado ?? 0m);
+    double progGeneral = (double)(ViewBag.ProgresoGeneral ?? 0.0);
+    decimal totalAsig = totalObj;   // "Asignado" = suma de objetivos
 }
 
-<header class="dark:bg-slate-900 border-b border-slate-800">
+<!-- ═════════ HEADER ═════════ -->
+<header class="border-b border-slate-800 px-6 py-3 flex items-center justify-between gap-4">
+    <div>
+        <h2 class="text-white text-lg font-semibold">Gestión de Presupuestos</h2>
+        <p class="text-slate-400 text-xs">Controla tus límites de gasto por categoría</p>
+    </div>
+    <a href="@Url.Action("Create","Presupuestos")"
+       class="flex items-center gap-2 bg-violet-600 hover:bg-violet-500 transition-colors text-white px-4 py-2 rounded-xl text-sm font-semibold">
+        <i class="fa-solid fa-plus"></i>
+        Nuevo Presupuesto
+    </a>
 </header>
 
-<main class="overflow-y-auto p-6 ">
+<!-- ═════════ MAIN ═════════ -->
+<main class="overflow-y-auto p-6">
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="bg-emerald-900/40 border border-emerald-700 text-emerald-400 px-4 py-3 rounded-xl mb-6 text-sm">
+            <i class="fa-solid fa-circle-check mr-2"></i>@TempData["Success"]
+        </div>
+    }
+
     @if (empty != null)
     {
         @Html.Partial("_EmptyState", empty)
     }
     else
     {
-        <!-- DASHBOARD NORMAL -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- cards -->
+        <!-- ── Tarjetas resumen superiores ── -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+
+            <!-- Presupuesto Total -->
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl px-5 py-4 col-span-2 md:col-span-1">
+                <p class="text-slate-400 text-xs uppercase tracking-wider mb-1">Presupuesto Total Mensual</p>
+                <p class="text-white text-2xl font-bold">$@totalObj.ToString("N2")</p>
+            </div>
+
+            <!-- Asignado -->
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl px-5 py-4">
+                <p class="text-slate-400 text-xs uppercase tracking-wider mb-1">Asignado</p>
+                <p class="text-violet-400 text-2xl font-bold">$@totalAsig.ToString("N2")</p>
+            </div>
+
+            <!-- Gasto Real -->
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl px-5 py-4">
+                <p class="text-slate-400 text-xs uppercase tracking-wider mb-1">Gasto Real</p>
+                <p class="text-white text-2xl font-bold">$@totalGast.ToString("N2")</p>
+            </div>
+
+            <!-- Progreso General -->
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl px-5 py-4">
+                <p class="text-slate-400 text-xs uppercase tracking-wider mb-1">Progreso General</p>
+                <p class="text-violet-400 text-2xl font-bold">@progGeneral.ToString("N1")%</p>
+            </div>
+
+        </div>
+
+        <!-- ── Grid de presupuestos ── -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+
+            @foreach (var item in Model)
+            {
+                double pct = item.monto_objetivo > 0
+                    ? Math.Min(100, (double)((item.monto_gastado ?? 0) / item.monto_objetivo) * 100)
+                    : 0;
+                decimal disp = item.monto_objetivo - (item.monto_gastado ?? 0);
+                bool excedido = (item.monto_gastado ?? 0) > item.monto_objetivo;
+                bool critico = pct >= 85 && !excedido;
+
+                string barColor = excedido ? "bg-red-500"
+                                 : critico ? "bg-orange-400"
+                                            : "bg-violet-500";
+                string pctColor = excedido ? "text-red-400"
+                                 : critico ? "text-orange-400"
+                                            : "text-violet-400";
+                string dispColor = excedido ? "text-red-400" : "text-violet-400";
+
+                <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 flex flex-col gap-4 hover:border-slate-600 transition-colors">
+
+                    <!-- Cabecera: categoría + menú -->
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-violet-900/50 text-violet-400 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-tag text-sm"></i>
+                            </div>
+                            <div>
+                                <p class="text-white font-semibold text-sm">
+                                    @(item.Categoria != null ? item.Categoria.nombre : "Sin categoría")
+                                </p>
+                                <p class="text-slate-500 text-xs">
+                                    Creado @(item.fecha_creacion.HasValue ? item.fecha_creacion.Value.ToString("dd/MM/yyyy") : "—")
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Acciones -->
+                        <div class="flex items-center gap-2 text-slate-500">
+                            <a href="@Url.Action("Details", new { id = item.id })"
+                               class="hover:text-violet-400 transition-colors" title="Ver detalle">
+                                <i class="fa-solid fa-eye text-sm"></i>
+                            </a>
+                            <a href="@Url.Action("Edit", new { id = item.id })"
+                               class="hover:text-yellow-400 transition-colors" title="Editar">
+                                <i class="fa-solid fa-pen-to-square text-sm"></i>
+                            </a>
+                            <a href="@Url.Action("Delete", new { id = item.id })"
+                               class="hover:text-red-400 transition-colors" title="Eliminar">
+                                <i class="fa-solid fa-trash text-sm"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Monto principal -->
+                    <div class="flex items-baseline gap-1">
+                        <span class="text-white text-2xl font-bold">
+                            $@((item.monto_gastado ?? 0).ToString("N2"))
+                        </span>
+                        <span class="text-slate-400 text-sm">/ $@item.monto_objetivo.ToString("N2")</span>
+                        <span class="ml-auto text-sm font-bold @pctColor">@pct.ToString("N0")%</span>
+                    </div>
+
+                    <!-- Barra de progreso -->
+                    <div class="h-1.5 bg-slate-700 rounded-full overflow-hidden">
+                        <div class="h-full @barColor rounded-full transition-all duration-500"
+                             style="width: @pct.ToString("N1", System.Globalization.CultureInfo.InvariantCulture)%">
+                        </div>
+                    </div>
+
+                    <!-- Gastado / Restante -->
+                    <div class="flex items-center justify-between text-xs">
+                        <div>
+                            <p class="text-slate-500 uppercase tracking-wider">Gastado</p>
+                            <p class="text-white font-semibold mt-0.5">$@((item.monto_gastado ?? 0).ToString("N2"))</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-slate-500 uppercase tracking-wider">Restante</p>
+                            <p class="@dispColor font-semibold mt-0.5">$@disp.ToString("N2")</p>
+                        </div>
+                    </div>
+
+                </div>
+            }
+
+            <!-- Tarjeta: Crear nuevo -->
+            <a href="@Url.Action("Create","Presupuestos")"
+               class="bg-slate-800/50 border border-dashed border-slate-600 hover:border-violet-500 hover:bg-slate-800 rounded-2xl p-5 flex flex-col items-center justify-center gap-3 transition-colors min-h-[200px] group">
+                <div class="w-12 h-12 rounded-2xl bg-slate-700 group-hover:bg-violet-900/50 flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-plus text-slate-400 group-hover:text-violet-400 text-lg transition-colors"></i>
+                </div>
+                <span class="text-slate-400 group-hover:text-white text-sm font-medium transition-colors">
+                    Crear Nuevo Presupuesto
+                </span>
+            </a>
+
         </div>
     }
-</main>
 
+</main>

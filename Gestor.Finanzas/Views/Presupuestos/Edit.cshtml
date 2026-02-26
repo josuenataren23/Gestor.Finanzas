@@ -1,0 +1,112 @@
+﻿@model Gestor.Finanzas.Models.ViewModels.PresupuestoViewModel
+@{
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    ViewBag.Title = "Editar Presupuesto";
+
+    double pct = Model.Porcentaje;
+    string barColor = Model.Excedido ? "bg-red-500" : pct >= 85 ? "bg-orange-400" : "bg-violet-500";
+    string pctColor = Model.Excedido ? "text-red-400" : pct >= 85 ? "text-orange-400" : "text-violet-400";
+}
+
+<!-- ═════════ HEADER ═════════ -->
+<header class="border-b border-slate-800 px-6 py-3 flex items-center justify-between gap-4">
+    <div>
+        <h2 class="text-white text-lg font-semibold">Editar presupuesto</h2>
+        <p class="text-slate-400 text-xs">Ajusta el límite de gasto de esta categoría</p>
+    </div>
+    <a href="@Url.Action("Index","Presupuestos")"
+       class="flex items-center gap-2 text-slate-400 hover:text-white transition-colors text-sm">
+        <i class="fa-solid fa-arrow-left"></i>
+        Volver
+    </a>
+</header>
+
+<!-- ═════════ MAIN ═════════ -->
+<main class="overflow-y-auto p-6">
+    <div class="max-w-xl mx-auto space-y-4">
+
+        <!-- Mini tarjeta de estado actual -->
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5">
+            <p class="text-slate-400 text-xs uppercase tracking-wider mb-3">Estado actual</p>
+            <div class="flex items-baseline gap-1 mb-3">
+                <span class="text-white text-xl font-bold">$@Model.monto_gastado.ToString("N2")</span>
+                <span class="text-slate-400 text-sm">gastado de $@Model.monto_objetivo.ToString("N2")</span>
+                <span class="ml-auto font-bold text-sm @pctColor">@pct.ToString("N0")%</span>
+            </div>
+            <div class="h-1.5 bg-slate-700 rounded-full overflow-hidden">
+                <div class="h-full @barColor rounded-full"
+                     style="width: @pct.ToString("N1", System.Globalization.CultureInfo.InvariantCulture)%">
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario -->
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden">
+
+            <div class="bg-slate-900 px-6 py-4 border-b border-slate-700">
+                <p class="text-white font-semibold text-sm">Modificar presupuesto</p>
+                <p class="text-slate-400 text-xs mt-0.5">Solo puedes cambiar la categoría y el monto objetivo</p>
+            </div>
+
+            @using (Html.BeginForm("Edit", "Presupuestos", FormMethod.Post, new { @class = "p-6 space-y-5" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.id)
+                @Html.HiddenFor(m => m.monto_gastado)
+                @Html.HiddenFor(m => m.fecha_creacion)
+
+                if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="bg-red-900/40 border border-red-700 text-red-400 px-4 py-3 rounded-xl text-sm">
+                        <i class="fa-solid fa-circle-exclamation mr-2"></i>
+                        @Html.ValidationSummary(true, "", new { @class = "list-none m-0 p-0" })
+                    </div>
+                }
+
+                <!-- Categoría -->
+                <div>
+                    <label class="block text-slate-300 text-sm font-medium mb-1.5">
+                        Categoría <span class="text-red-400">*</span>
+                    </label>
+                    @Html.DropDownListFor(m => m.categoria_id,
+                        (SelectList)ViewBag.categoria_id,
+                        "— Selecciona una categoría —",
+                        new { @class = "w-full bg-slate-700 border border-slate-600 text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500" })
+                    @Html.ValidationMessageFor(m => m.categoria_id, "", new { @class = "text-red-400 text-xs mt-1 block" })
+                </div>
+
+                <!-- Monto objetivo -->
+                <div>
+                    <label class="block text-slate-300 text-sm font-medium mb-1.5">
+                        Monto objetivo <span class="text-red-400">*</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-semibold">$</span>
+                        @Html.TextBoxFor(m => m.monto_objetivo, new
+                        {
+                            @class = "w-full bg-slate-700 border border-slate-600 text-white rounded-xl pl-8 pr-4 py-2.5 text-sm focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500",
+                            placeholder = "0.00",
+                            type = "number",
+                            step = "0.01",
+                            min = "0.01"
+                        })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.monto_objetivo, "", new { @class = "text-red-400 text-xs mt-1 block" })
+                </div>
+
+                <!-- Botones -->
+                <div class="flex items-center gap-3 pt-2">
+                    <button type="submit"
+                            class="flex-1 flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-500 transition-colors text-white px-4 py-2.5 rounded-xl text-sm font-semibold">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        Guardar cambios
+                    </button>
+                    <a href="@Url.Action("Index","Presupuestos")"
+                       class="flex-1 flex items-center justify-center gap-2 bg-slate-700 hover:bg-slate-600 border border-slate-600 transition-colors text-slate-300 px-4 py-2.5 rounded-xl text-sm font-semibold">
+                        Cancelar
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</main>

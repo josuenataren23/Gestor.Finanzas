@@ -1,0 +1,101 @@
+﻿@model Gestor.Finanzas.Models.Presupuesto
+@{
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    ViewBag.Title = "Eliminar Presupuesto";
+
+    decimal gastado = Model.monto_gastado ?? 0;
+    double pct = Model.monto_objetivo > 0
+        ? Math.Min(100, (double)(gastado / Model.monto_objetivo) * 100) : 0;
+    bool excedido = gastado > Model.monto_objetivo;
+    string barColor = excedido ? "bg-red-500" : pct >= 85 ? "bg-orange-400" : "bg-violet-500";
+    string pctColor = excedido ? "text-red-400" : pct >= 85 ? "text-orange-400" : "text-violet-400";
+}
+
+<!-- ═════════ HEADER ═════════ -->
+<header class="border-b border-slate-800 px-6 py-3 flex items-center justify-between gap-4">
+    <div>
+        <h2 class="text-white text-lg font-semibold">Eliminar presupuesto</h2>
+        <p class="text-slate-400 text-xs">Esta acción no se puede deshacer</p>
+    </div>
+    <a href="@Url.Action("Index","Presupuestos")"
+       class="flex items-center gap-2 text-slate-400 hover:text-white transition-colors text-sm">
+        <i class="fa-solid fa-arrow-left"></i>
+        Volver
+    </a>
+</header>
+
+<!-- ═════════ MAIN ═════════ -->
+<main class="overflow-y-auto p-6">
+    <div class="max-w-xl mx-auto space-y-4">
+
+        <!-- Aviso -->
+        <div class="bg-red-900/30 border border-red-700/60 rounded-2xl px-5 py-4 flex items-start gap-3">
+            <i class="fa-solid fa-triangle-exclamation text-red-400 text-lg mt-0.5 shrink-0"></i>
+            <div>
+                <p class="text-red-300 font-semibold text-sm">¿Seguro que deseas eliminar este presupuesto?</p>
+                <p class="text-red-400/70 text-xs mt-1">Se eliminará permanentemente junto con su historial de seguimiento.</p>
+            </div>
+        </div>
+
+        <!-- Tarjeta resumen -->
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden">
+
+            <div class="bg-slate-900 px-6 py-5 border-b border-slate-700 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-violet-900/50 text-violet-400 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-tag"></i>
+                </div>
+                <div>
+                    <p class="text-white font-semibold">
+                        @(Model.Categoria != null ? Model.Categoria.nombre : "Sin categoría")
+                    </p>
+                    <p class="text-slate-400 text-xs">
+                        Creado @(Model.fecha_creacion.HasValue ? Model.fecha_creacion.Value.ToString("dd/MM/yyyy") : "—")
+                    </p>
+                </div>
+            </div>
+
+            <!-- Barra de progreso -->
+            <div class="px-6 py-4 border-b border-slate-700">
+                <div class="flex items-baseline gap-1 mb-2">
+                    <span class="text-white font-bold">$@gastado.ToString("N2")</span>
+                    <span class="text-slate-400 text-sm">/ $@Model.monto_objetivo.ToString("N2")</span>
+                    <span class="ml-auto text-sm font-bold @pctColor">@pct.ToString("N0")%</span>
+                </div>
+                <div class="h-1.5 bg-slate-700 rounded-full overflow-hidden">
+                    <div class="h-full @barColor rounded-full"
+                         style="width: @pct.ToString("N1", System.Globalization.CultureInfo.InvariantCulture)%">
+                    </div>
+                </div>
+            </div>
+
+            <div class="divide-y divide-slate-700">
+                <div class="px-6 py-4 flex justify-between">
+                    <span class="text-slate-400 text-sm">Monto objetivo</span>
+                    <span class="text-white font-semibold text-sm">$@Model.monto_objetivo.ToString("N2")</span>
+                </div>
+                <div class="px-6 py-4 flex justify-between">
+                    <span class="text-slate-400 text-sm">Monto gastado</span>
+                    <span class="text-white font-semibold text-sm">$@gastado.ToString("N2")</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botones -->
+        @using (Html.BeginForm("Delete", "Presupuestos", FormMethod.Post, new { @class = "flex items-center gap-3" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.Hidden("id", Model.id)
+
+            <button type="submit"
+                    class="flex-1 flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 transition-colors text-white px-4 py-2.5 rounded-xl text-sm font-semibold">
+                <i class="fa-solid fa-trash"></i>
+                Sí, eliminar
+            </button>
+            <a href="@Url.Action("Index","Presupuestos")"
+               class="flex-1 flex items-center justify-center gap-2 bg-slate-700 hover:bg-slate-600 border border-slate-600 transition-colors text-slate-300 px-4 py-2.5 rounded-xl text-sm font-semibold">
+                Cancelar
+            </a>
+        }
+
+    </div>
+</main>
