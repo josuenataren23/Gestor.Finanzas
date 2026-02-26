@@ -131,7 +131,7 @@
                             {
                                 bool esIngreso = tx.tipo_id == TIPO_INGRESO;
                                 var nomCat = tx.Categoria?.nombre?.ToLower() ?? "";
-                                var icono = esIngreso ? "fa-arrow-down-to-line"
+                                var icono = esIngreso ? "fa-money-bills"
                                            : nomCat.Contains("aliment") ? "fa-utensils"
                                            : nomCat.Contains("trans") ? "fa-car"
                                            : nomCat.Contains("entret") ? "fa-film"

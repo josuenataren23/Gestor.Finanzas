@@ -208,6 +208,9 @@
     <Content Include="Views\Account\LoginLayout.cshtml" />
     <Content Include="Views\Shared\_EmptyState.cshtml" />
     <Content Include="Views\Transacciones\Create.cshtml" />
+    <Content Include="Views\Transacciones\Details.cshtml" />
+    <Content Include="Views\Transacciones\Edit.cshtml" />
+    <Content Include="Views\Transacciones\Delete.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
