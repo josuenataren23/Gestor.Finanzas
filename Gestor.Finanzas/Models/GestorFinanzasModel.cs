@@ -104,5 +104,7 @@ namespace Gestor.Finanzas.Models
         }
 
         public System.Data.Entity.DbSet<Gestor.Finanzas.Models.ViewModels.TransaccionViewModel> TransaccionViewModels { get; set; }
+
+        public System.Data.Entity.DbSet<Gestor.Finanzas.Models.ViewModels.PresupuestoViewModel> PresupuestoViewModels { get; set; }
     }
 }

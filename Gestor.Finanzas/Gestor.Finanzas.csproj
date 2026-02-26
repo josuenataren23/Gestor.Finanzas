@@ -160,6 +160,7 @@
     <Compile Include="Models\Transaccione.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Models\ViewModels\EmptyStateViewModel.cs" />
+    <Compile Include="Models\ViewModels\PresupuestoViewModel.cs" />
     <Compile Include="Models\ViewModels\TransaccionViewModel.cs" />
     <Compile Include="Startup.Auth.cs" />
     <Content Include="App_Code\HtmlHelpers.cs" />
@@ -211,6 +212,10 @@
     <Content Include="Views\Transacciones\Details.cshtml" />
     <Content Include="Views\Transacciones\Edit.cshtml" />
     <Content Include="Views\Transacciones\Delete.cshtml" />
+    <Content Include="Views\Presupuestos\Create.cshtml" />
+    <Content Include="Views\Presupuestos\Details.cshtml" />
+    <Content Include="Views\Presupuestos\Edit.cshtml" />
+    <Content Include="Views\Presupuestos\Delete.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
