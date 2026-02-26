@@ -89,10 +89,13 @@ namespace Gestor.Finanzas.Controllers
             var tx = db.Transacciones
                 .FirstOrDefault(t => t.id == id && t.usuario_id == UsuarioActualId);
 
-            if (tx == null) return HttpNotFound();
+            if (tx == null)
+                return HttpNotFound();
 
-            CargarSelectLists(tx.tipo_id, tx.categoria_id);
-            return View(new TransaccionViewModel
+            // 🔴 CLAVE: limpiar ModelState
+            ModelState.Clear();
+
+            var vm = new TransaccionViewModel
             {
                 id = tx.id,
                 tipo_id = tx.tipo_id,
@@ -100,7 +103,12 @@ namespace Gestor.Finanzas.Controllers
                 monto = Math.Abs(tx.monto),
                 fecha_transaccion = tx.fecha_transaccion,
                 descripcion = tx.descripcion
-            });
+            };
+
+            // Cargar selects CON el valor del modelo
+            CargarSelectLists(vm.tipo_id, vm.categoria_id);
+
+            return View(vm);
         }
 
         [HttpPost]

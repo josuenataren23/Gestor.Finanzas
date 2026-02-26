@@ -102,5 +102,7 @@ namespace Gestor.Finanzas.Models
                 .WithOptional(e => e.Usuario)
                 .HasForeignKey(e => e.usuario_id);
         }
+
+        public System.Data.Entity.DbSet<Gestor.Finanzas.Models.ViewModels.TransaccionViewModel> TransaccionViewModels { get; set; }
     }
 }

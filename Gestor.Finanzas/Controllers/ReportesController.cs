@@ -14,9 +14,14 @@ namespace Gestor.Finanzas.Controllers
         // GET: Reportes
         public ActionResult Index()
         {
-            var totalTransacciones = db.Transacciones.Count();
+            var userId = UsuarioActualId;
+            var transacciones = db.Transacciones
+                .Include("Categoria")
+                .Include("TipoTransaccion")
+                .Where(t => t.usuario_id == userId)
+                .ToList();
 
-            if (totalTransacciones < 5)
+            if (transacciones.Count < 5)
             {
                 ViewBag.EmptyState = new EmptyStateViewModel
                 {
