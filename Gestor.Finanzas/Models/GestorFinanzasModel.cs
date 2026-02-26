@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
@@ -16,7 +16,10 @@ namespace Gestor.Finanzas.Models
         public virtual DbSet<Meta> Metas { get; set; }
         public virtual DbSet<Presupuesto> Presupuestos { get; set; }
         public virtual DbSet<Transaccione> Transacciones { get; set; }
+        public virtual DbSet<TipoTransaccion> TipoTransacciones { get; set; }
         public virtual DbSet<Usuario> Usuarios { get; set; }
+
+        // ⚠️ NUNCA agregar DbSet de ViewModels aquí
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -65,6 +68,12 @@ namespace Gestor.Finanzas.Models
             modelBuilder.Entity<Transaccione>()
                 .Property(e => e.descripcion)
                 .IsUnicode(false);
+
+            modelBuilder.Entity<Transaccione>()
+                .HasRequired(t => t.TipoTransaccion)
+                .WithMany(tt => tt.Transacciones)
+                .HasForeignKey(t => t.tipo_id)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Usuario>()
                 .Property(e => e.Nombre)

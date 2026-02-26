@@ -1,0 +1,164 @@
+﻿@model Gestor.Finanzas.Models.ViewModels.TransaccionViewModel
+@{
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    ViewBag.Title = "Nueva Transacción";
+}
+
+<!-- ═════════ HEADER ═════════ -->
+<header class="border-b border-slate-800 px-6 py-3 flex items-center gap-4">
+
+    <a href="@Url.Action("Index")"
+       class="w-9 h-9 flex items-center justify-center rounded-lg bg-slate-800 border border-slate-700 text-slate-400 hover:text-white hover:bg-slate-700 transition">
+        <i class="fa-solid fa-arrow-left text-sm"></i>
+    </a>
+
+    <div>
+        <h2 class="text-white text-lg font-semibold">Nueva Transacción</h2>
+        <p class="text-slate-400 text-xs">Registra un ingreso o gasto</p>
+    </div>
+
+</header>
+
+<!-- ═════════ MAIN ═════════ -->
+<main class="overflow-y-auto p-6">
+
+    <div class="max-w-xl mx-auto">
+
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6">
+
+            @using (Html.BeginForm("Create", "Transacciones", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                @Html.ValidationSummary(true, "", new {
+                    @class = "mb-4 bg-red-900/40 border border-red-700 text-red-400 px-4 py-3 rounded-xl text-sm"
+                })
+
+                <!-- Tipo -->
+                <div class="mb-5">
+                    <label class="block text-slate-300 text-sm font-semibold mb-1">Tipo</label>
+                    @Html.DropDownList(
+                        "tipo_id",
+                        null,
+                        "— Seleccionar tipo —",
+                        new {
+                            @class = "w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-300 focus:outline-none focus:border-violet-500",
+                            id = "tipo_id"
+                        })
+                    @Html.ValidationMessageFor(m => m.tipo_id, "", new { @class = "text-red-400 text-xs mt-1 block" })
+                </div>
+
+                <!-- Badge dinámico -->
+                <div id="tipo-badge" class="mb-5 hidden">
+                    <span id="badge-texto"
+                          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-semibold">
+                    </span>
+                </div>
+
+                <!-- Categoría -->
+                <div class="mb-5" id="cat-group">
+                    <label class="block text-slate-300 text-sm font-semibold mb-1">Categoría</label>
+                    @Html.DropDownList(
+                        "categoria_id",
+                        null,
+                        "— Sin categoría —",
+                        new {
+                            @class = "w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-300 focus:outline-none focus:border-violet-500"
+                        })
+                    @Html.ValidationMessageFor(m => m.categoria_id, "", new { @class = "text-red-400 text-xs mt-1 block" })
+                </div>
+
+                <!-- Monto -->
+                <div class="mb-5">
+                    <label class="block text-slate-300 text-sm font-semibold mb-1">Monto</label>
+                    <div class="flex">
+                        <span id="monto-signo"
+                              class="flex items-center px-3 rounded-l-xl bg-slate-700 border border-slate-700 text-slate-400 text-sm font-semibold">
+                            $
+                        </span>
+                        @Html.TextBoxFor(m => m.monto, new {
+                            @class = "w-full bg-slate-900 border border-l-0 border-slate-700 rounded-r-xl px-4 py-2 text-sm text-slate-300 focus:outline-none focus:border-violet-500",
+                            placeholder = "0.00",
+                            type = "number",
+                            step = "0.01",
+                            min = "0.01"
+                        })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.monto, "", new { @class = "text-red-400 text-xs mt-1 block" })
+                </div>
+
+                <!-- Descripción -->
+                <div class="mb-6">
+                    <label class="block text-slate-300 text-sm font-semibold mb-1">Descripción</label>
+                    @Html.TextAreaFor(m => m.descripcion, 3, 0, new {
+                        @class = "w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-300 placeholder-slate-500 focus:outline-none focus:border-violet-500",
+                        placeholder = "Descripción opcional…"
+                    })
+                    @Html.ValidationMessageFor(m => m.descripcion, "", new { @class = "text-red-400 text-xs mt-1 block" })
+                </div>
+
+                <!-- Info -->
+                <div class="mb-6 flex items-start gap-2 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-400 text-xs">
+                    <i class="fa-solid fa-circle-info mt-0.5"></i>
+                    <span>La fecha y hora se registran automáticamente al guardar.</span>
+                </div>
+
+                <!-- Acciones -->
+                <div class="flex gap-3">
+                    <button type="submit"
+                            class="flex-1 bg-violet-600 hover:bg-violet-500 transition-colors text-white px-4 py-2 rounded-xl text-sm font-semibold">
+                        <i class="fa-solid fa-floppy-disk mr-1"></i>
+                        Guardar
+                    </button>
+
+                    <a href="@Url.Action("Index")"
+                       class="flex-1 text-center bg-slate-700 hover:bg-slate-600 transition-colors text-white px-4 py-2 rounded-xl text-sm font-semibold">
+                        Cancelar
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+
+</main>
+
+<script>
+    var selectTipo = document.getElementById('tipo_id');
+    var catGroup   = document.getElementById('cat-group');
+    var badge      = document.getElementById('tipo-badge');
+    var badgeText  = document.getElementById('badge-texto');
+    var signo      = document.getElementById('monto-signo');
+
+    function actualizarTipo() {
+        var texto = selectTipo.options[selectTipo.selectedIndex]?.text?.toLowerCase() ?? '';
+        var val   = selectTipo.value;
+
+        if (!val) {
+            badge.classList.add('hidden');
+            catGroup.style.display = 'block';
+            signo.textContent = '$';
+            return;
+        }
+
+        badge.classList.remove('hidden');
+
+        var esIngreso = texto.includes('ingreso');
+
+        if (esIngreso) {
+            badgeText.textContent = '💰 Ingreso';
+            badgeText.className = 'inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-semibold bg-emerald-900 text-emerald-400';
+            signo.textContent = '+$';
+            signo.className = 'flex items-center px-3 rounded-l-xl bg-emerald-900 border border-emerald-700 text-emerald-400 text-sm font-semibold';
+            catGroup.style.display = 'none';
+        } else {
+            badgeText.textContent = '💸 Gasto';
+            badgeText.className = 'inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-semibold bg-red-900 text-red-400';
+            signo.textContent = '-$';
+            signo.className = 'flex items-center px-3 rounded-l-xl bg-red-900 border border-red-700 text-red-400 text-sm font-semibold';
+            catGroup.style.display = 'block';
+        }
+    }
+
+    selectTipo.addEventListener('change', actualizarTipo);
+    actualizarTipo();
+</script>
