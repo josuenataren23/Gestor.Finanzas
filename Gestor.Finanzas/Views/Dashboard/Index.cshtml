@@ -1,21 +1,267 @@
-﻿@{
+﻿@using System.Web.Script.Serialization
+@{
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
     ViewBag.Title = "Resumen";
+
     var empty = ViewBag.EmptyState as Gestor.Finanzas.Models.ViewModels.EmptyStateViewModel;
+
+    decimal balanceTotal = ViewBag.BalanceTotal != null ? (decimal)ViewBag.BalanceTotal : 0m;
+    decimal totalIngresos = ViewBag.TotalIngresos != null ? (decimal)ViewBag.TotalIngresos : 0m;
+    decimal gastosMes = ViewBag.GastosMes != null ? (decimal)ViewBag.GastosMes : 0m;
+    decimal variacion = ViewBag.VariacionGastos != null ? (decimal)ViewBag.VariacionGastos : 0m;
+    decimal totalAhorro = ViewBag.TotalAhorro != null ? (decimal)ViewBag.TotalAhorro : 0m;
+    decimal totalCats = ViewBag.TotalGastosCategorias != null ? (decimal)ViewBag.TotalGastosCategorias : 0m;
+
+    var metaDestacada = ViewBag.MetaDestacada as Gestor.Finanzas.Models.Meta;
+    var ultimasTx = ViewBag.UltimasTransacciones as IEnumerable<Gestor.Finanzas.Models.Transaccione>;
+
+    string[] tendenciaDias = ViewBag.TendenciaDias as string[] ?? new string[0];
+    decimal[] tendenciaGastos = ViewBag.TendenciaGastos as decimal[] ?? new decimal[0];
+    string[] catLabels = ViewBag.CategoriaLabels as string[] ?? new string[0];
+    decimal[] catTotales = ViewBag.CategoriaTotales as decimal[] ?? new decimal[0];
+
+    var serializer = new JavaScriptSerializer();
+
+    int metaPct = 0;
+    decimal metaFaltante = 0m;
+    if (metaDestacada != null && metaDestacada.monto_objetivo > 0)
+    {
+        metaPct = (int)Math.Min((metaDestacada.monto_actual ?? 0) / metaDestacada.monto_objetivo * 100, 100);
+        metaFaltante = metaDestacada.monto_objetivo - (metaDestacada.monto_actual ?? 0);
+    }
+
+    // 1 = GASTO | 2 = INGRESO
+    const int TIPO_GASTO = 1;
+    const int TIPO_INGRESO = 2;
+
+    string[] coloresCat = new[] { "#7c3aed", "#a855f7", "#c084fc", "#6d28d9" };
+
+    string tendenciaDiasJson = serializer.Serialize(tendenciaDias);
+    string tendenciaGastosJson = serializer.Serialize(tendenciaGastos);
+    string catLabelsJson = serializer.Serialize(catLabels);
+    string catTotalesJson = serializer.Serialize(catTotales);
 }
-<header class="dark:bg-slate-900 border-b border-slate-800">
+
+<header class="border-b border-slate-800 px-6 py-3 flex items-center gap-4">
+    <div class="flex-1">
+        <div class="relative max-w-sm">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
+            <input type="text" placeholder="Buscar transacciones..."
+                   class="w-full bg-slate-800 border border-slate-700 rounded-lg pl-9 pr-4 py-2 text-sm text-slate-300 placeholder-slate-500 focus:outline-none focus:border-violet-500" />
+        </div>
+    </div>
+    <button class="text-slate-400 hover:text-white transition-colors">
+        <i class="fa-regular fa-bell text-lg"></i>
+    </button>
+    <button class="w-7 h-7 rounded-full bg-slate-700 text-slate-400 hover:text-white text-sm flex items-center justify-center">
+        <i class="fa-solid fa-question"></i>
+    </button>
 </header>
 
-<main class="overflow-y-auto p-6 ">
+<main class="overflow-y-auto p-6">
+
     @if (empty != null)
     {
         @Html.Partial("_EmptyState", empty)
     }
     else
     {
-        <!-- DASHBOARD NORMAL -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- cards -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <div class="lg:col-span-2 flex flex-col gap-6">
+
+                <!-- Tarjetas resumen -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="bg-slate-800 rounded-2xl p-5 border border-slate-700">
+                        <p class="text-slate-400 text-xs font-semibold uppercase tracking-widest mb-2">Balance Total</p>
+                        <p class="@(balanceTotal >= 0 ? "text-white" : "text-red-400") text-2xl font-bold">
+                            @(balanceTotal >= 0 ? "+" : "")$@balanceTotal.ToString("N2")
+                        </p>
+                        <p class="text-slate-400 text-xs mt-1">
+                            <span class="text-emerald-400">↑ $@totalIngresos.ToString("N2")</span>
+                            <span class="mx-1 text-slate-600">|</span>
+                            <span class="text-red-400">↓ $@gastosMes.ToString("N2")</span>
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-800 rounded-2xl p-5 border border-slate-700">
+                        <p class="text-slate-400 text-xs font-semibold uppercase tracking-widest mb-2">Gastos del Mes</p>
+                        <p class="text-white text-2xl font-bold">$@gastosMes.ToString("N2")</p>
+                        <p class="@(variacion >= 0 ? "text-red-400" : "text-emerald-400") text-xs mt-1">
+                            <i class="fa-solid @(variacion >= 0 ? "fa-arrow-trend-up" : "fa-arrow-trend-down") me-1"></i>
+                            @(variacion >= 0 ? "+" : "")@variacion% vs mes anterior
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-800 rounded-2xl p-5 border border-slate-700">
+                        <p class="text-slate-400 text-xs font-semibold uppercase tracking-widest mb-2">Ahorro</p>
+                        <p class="text-white text-2xl font-bold">$@totalAhorro.ToString("N2")</p>
+                        @if (metaDestacada != null)
+                        {
+                            <p class="text-emerald-400 text-xs mt-1">
+                                <i class="fa-solid fa-circle-check me-1"></i>Meta al @metaPct%
+                            </p>
+                        }
+                    </div>
+                </div>
+
+                <!-- Tendencia Semanal -->
+                <div class="bg-slate-800 rounded-2xl p-5 border border-slate-700">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-white font-semibold">Tendencia Semanal</h3>
+                        <span class="text-slate-400 text-sm">Esta Semana</span>
+                    </div>
+                    <div class="relative" style="height:180px;">
+                        <canvas id="chartTendencia"></canvas>
+                    </div>
+                </div>
+
+                <!-- Últimos Movimientos -->
+                <div class="bg-slate-800 rounded-2xl p-5 border border-slate-700">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-white font-semibold">Últimos Movimientos</h3>
+                        <a href="@Url.Action("Index", "Transacciones")"
+                           class="text-violet-400 text-sm hover:text-violet-300 transition-colors">Ver todo</a>
+                    </div>
+
+                    @if (ultimasTx != null && ultimasTx.Any())
+                    {
+                        <div class="flex flex-col gap-3">
+                            @foreach (var tx in ultimasTx)
+                            {
+                                bool esIngreso = tx.tipo_id == TIPO_INGRESO;
+                                var nomCat = tx.Categoria?.nombre?.ToLower() ?? "";
+                                var icono = esIngreso ? "fa-arrow-down-to-line"
+                                           : nomCat.Contains("aliment") ? "fa-utensils"
+                                           : nomCat.Contains("trans") ? "fa-car"
+                                           : nomCat.Contains("entret") ? "fa-film"
+                                           : nomCat.Contains("salud") ? "fa-heart-pulse"
+                                           : "fa-tag";
+
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl @(esIngreso ? "bg-emerald-900" : "bg-slate-700") flex items-center justify-center flex-shrink-0">
+                                        <i class="fa-solid @icono @(esIngreso ? "text-emerald-400" : "text-violet-400") text-sm"></i>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-white text-sm font-medium truncate">
+                                            @(string.IsNullOrEmpty(tx.descripcion) ? "Sin descripción" : tx.descripcion)
+                                        </p>
+                                        <p class="text-slate-400 text-xs">
+                                            @(esIngreso ? "Ingreso" : (tx.Categoria?.nombre ?? "Sin categoría")) · @tx.fecha_transaccion.ToString("dd MMM, hh:mm tt")
+                                        </p>
+                                    </div>
+                                    <span class="text-sm font-semibold flex-shrink-0 @(esIngreso ? "text-emerald-400" : "text-red-400")">
+                                        @(esIngreso ? "+" : "-")$@tx.monto.ToString("N2")
+                                    </span>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-slate-500 text-sm text-center py-6">No hay movimientos recientes</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Columna derecha -->
+            <div class="flex flex-col gap-6">
+
+                <div class="bg-gradient-to-br from-violet-600 to-violet-800 rounded-2xl p-5">
+                    <h3 class="text-white font-semibold mb-1">Acción Rápida</h3>
+                    <p class="text-violet-200 text-sm mb-4">Registra tus movimientos en segundos para no perder el control.</p>
+                    <a href="@Url.Action("Create", "Transacciones")"
+                       class="w-full flex items-center justify-center gap-2 bg-slate-900 text-white rounded-xl py-3 text-sm font-semibold hover:bg-slate-800 transition-colors">
+                        <i class="fa-solid fa-plus"></i> Añadir Transacción
+                    </a>
+                </div>
+
+                <div class="bg-slate-800 rounded-2xl p-5 border border-slate-700">
+                    <h3 class="text-white font-semibold mb-4">Gastos por Categoría</h3>
+                    @if (catLabels.Length > 0)
+                    {
+                        <div class="relative flex items-center justify-center mb-4" style="height:160px;">
+                            <canvas id="chartCategorias"></canvas>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                <span class="text-white text-xl font-bold">$@totalCats.ToString("N0")</span>
+                                <span class="text-slate-400 text-xs">TOTAL</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            @for (int i = 0; i < catLabels.Length; i++)
+                            {
+                                var pct = totalCats > 0 ? (int)(catTotales[i] / totalCats * 100) : 0;
+                                var color = coloresCat[i % coloresCat.Length];
+                                <div class="flex items-center justify-between text-sm">
+                                    <div class="flex items-center gap-2">
+                                        <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:@color"></span>
+                                        <span class="text-slate-300">@catLabels[i]</span>
+                                    </div>
+                                    <span class="text-slate-400">@pct%</span>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-slate-500 text-sm text-center py-6">Sin gastos este mes</p>
+                    }
+                </div>
+
+                @if (metaDestacada != null)
+                {
+                    <div class="bg-slate-800 rounded-2xl p-5 border border-slate-700">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-white font-semibold text-sm truncate">Meta: @metaDestacada.nombre</h3>
+                            <span class="text-violet-400 text-sm font-bold ml-2">@metaPct%</span>
+                        </div>
+                        <div class="w-full bg-slate-700 rounded-full h-2 mb-3">
+                            <div class="bg-violet-500 h-2 rounded-full" style="width:@metaPct%"></div>
+                        </div>
+                        <p class="text-slate-400 text-xs">
+                            Te faltan <span class="text-white font-semibold">$@metaFaltante.ToString("N2")</span> para completar esta meta.
+                        </p>
+                        <a href="@Url.Action("Index", "Metas")"
+                           class="text-violet-400 text-xs hover:text-violet-300 mt-2 inline-block transition-colors">
+                            Ver todas las metas →
+                        </a>
+                    </div>
+                }
+            </div>
         </div>
     }
 </main>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+    (function () {
+        var ctx = document.getElementById('chartTendencia');
+        if (!ctx) return;
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(tendenciaDiasJson),
+                datasets: [{ data: @Html.Raw(tendenciaGastosJson), borderColor: '#7c3aed', backgroundColor: 'rgba(124,58,237,0.15)', borderWidth: 2.5, tension: 0.4, fill: true, pointRadius: 0, pointHoverRadius: 5 }]
+            },
+            options: { responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => '$' + c.parsed.y.toFixed(2) } } },
+                scales: {
+                    x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { size: 11 } } },
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { size: 11 }, callback: v => '$' + v }, beginAtZero: true }
+                }
+            }
+        });
+    })();
+
+    (function () {
+        var ctx = document.getElementById('chartCategorias');
+        if (!ctx) return;
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: { labels: @Html.Raw(catLabelsJson), datasets: [{ data: @Html.Raw(catTotalesJson), backgroundColor: ['#7c3aed','#a855f7','#c084fc','#6d28d9'], borderWidth: 0, hoverOffset: 6 }] },
+            options: { responsive: true, maintainAspectRatio: false, cutout: '72%', plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.label + ': $' + c.parsed.toFixed(2) } } } }
+        });
+    })();
+    </script>
+}

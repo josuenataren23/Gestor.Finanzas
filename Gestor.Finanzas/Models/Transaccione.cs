@@ -1,10 +1,8 @@
-namespace Gestor.Finanzas.Models
+﻿namespace Gestor.Finanzas.Models
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     public partial class Transaccione
     {
@@ -14,6 +12,8 @@ namespace Gestor.Finanzas.Models
 
         public int? categoria_id { get; set; }
 
+        public int tipo_id { get; set; }
+
         public decimal monto { get; set; }
 
         [Column(TypeName = "date")]
@@ -22,8 +22,8 @@ namespace Gestor.Finanzas.Models
         [StringLength(255)]
         public string descripcion { get; set; }
 
-        public virtual Categoria Categoria { get; set; }
-
-        public virtual Usuario Usuario { get; set; }
+        public virtual Categoria       Categoria       { get; set; }
+        public virtual Usuario         Usuario         { get; set; }
+        public virtual TipoTransaccion TipoTransaccion { get; set; }
     }
 }

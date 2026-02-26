@@ -2,6 +2,16 @@
 
 public class BaseController : Controller
 {
+    protected int UsuarioActualId
+    {
+        get
+        {
+            if (Session["UsuarioId"] != null)
+                return (int)Session["UsuarioId"];
+            return 0;
+        }
+    }
+
     protected override void OnActionExecuting(ActionExecutingContext filterContext)
     {
         if (Session["UsuarioId"] == null)
@@ -14,7 +24,6 @@ public class BaseController : Controller
                 }
             );
         }
-
         base.OnActionExecuting(filterContext);
     }
 }
