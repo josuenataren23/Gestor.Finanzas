@@ -1,24 +1,293 @@
-﻿
+﻿@using Gestor.Finanzas.Controllers
 @{
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
     ViewBag.Title = "Reportes";
+
     var empty = ViewBag.EmptyState as Gestor.Finanzas.Models.ViewModels.EmptyStateViewModel;
+    string periodo = (ViewBag.PeriodoActual ?? "mes") as string;
+
+    decimal totalIngresos = (decimal)(ViewBag.TotalIngresos ?? 0m);
+    decimal totalGastos = (decimal)(ViewBag.TotalGastos ?? 0m);
+    decimal balance = totalIngresos - totalGastos;
+    int totalTx = (int)(ViewBag.TotalTx ?? 0);
+
+    var recurrentes = ViewBag.Recurrentes as List<RecurrenteViewModel> ?? new List<RecurrenteViewModel>();
+
+    string tabClass = "px-4 py-1.5 rounded-lg text-sm font-medium transition-colors";
+    string tabActive = tabClass + " bg-violet-600 text-white";
+    string tabInactive = tabClass + " text-slate-400 hover:text-white";
 }
 
-<header class="dark:bg-slate-900 border-b border-slate-800">
+<!-- ═════════ HEADER ═════════ -->
+<header class="border-b border-slate-800 px-6 py-3 flex items-center justify-between gap-4 flex-wrap">
+    <div>
+        <h2 class="text-white text-lg font-semibold">Reportes de Actividad</h2>
+        <p class="text-slate-400 text-xs">Análisis visual de tus finanzas</p>
+    </div>
+
+    <!-- Filtros de período -->
+    <div class="flex items-center gap-2 bg-slate-800 border border-slate-700 rounded-xl p-1">
+        <a href="@Url.Action("Index", new { periodo = "mes" })"
+           class="@(periodo == "mes" ? tabActive : tabInactive)">
+            Mes actual
+        </a>
+        <a href="@Url.Action("Index", new { periodo = "3meses" })"
+           class="@(periodo == "3meses" ? tabActive : tabInactive)">
+            Últimos 3 meses
+        </a>
+        <a href="@Url.Action("Index", new { periodo = "anio" })"
+           class="@(periodo == "anio" ? tabActive : tabInactive)">
+            Este año
+        </a>
+    </div>
 </header>
 
-<main class="overflow-y-auto p-6 ">
+<!-- ═════════ MAIN ═════════ -->
+<main class="overflow-y-auto p-6 space-y-6">
+
     @if (empty != null)
     {
         @Html.Partial("_EmptyState", empty)
     }
     else
     {
-        <!-- DASHBOARD NORMAL -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- cards -->
+        <!-- ── Tarjetas resumen ── -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl px-5 py-4">
+                <p class="text-slate-400 text-xs uppercase tracking-wider mb-1">Ingresos</p>
+                <p class="text-emerald-400 text-2xl font-bold">+$@totalIngresos.ToString("N2")</p>
+            </div>
+
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl px-5 py-4">
+                <p class="text-slate-400 text-xs uppercase tracking-wider mb-1">Gastos</p>
+                <p class="text-red-400 text-2xl font-bold">-$@totalGastos.ToString("N2")</p>
+            </div>
+
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl px-5 py-4">
+                <p class="text-slate-400 text-xs uppercase tracking-wider mb-1">Balance</p>
+                <p class="text-2xl font-bold @(balance >= 0 ? "text-white" : "text-red-400")">
+                    @(balance >= 0 ? "+" : "")$@balance.ToString("N2")
+                </p>
+            </div>
+
+        </div>
+
+        <!-- ── Ingresos vs Gastos (barra) ── -->
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6">
+
+            <div class="flex items-start justify-between mb-1">
+                <div>
+                    <h3 class="text-white font-semibold flex items-center gap-2">
+                        <i class="fa-solid fa-chart-column text-violet-400"></i>
+                        Ingresos vs Gastos
+                    </h3>
+                    <p class="text-slate-400 text-xs mt-0.5">Comparativa histórica de los últimos 6 meses</p>
+                </div>
+                <!-- Leyenda -->
+                <div class="flex items-center gap-4 text-xs text-slate-400">
+                    <span class="flex items-center gap-1.5">
+                        <span class="w-3 h-3 rounded-full bg-violet-500 inline-block"></span>Ingresos
+                    </span>
+                    <span class="flex items-center gap-1.5">
+                        <span class="w-3 h-3 rounded-full bg-slate-600 inline-block"></span>Gastos
+                    </span>
+                </div>
+            </div>
+
+            <div class="h-64 mt-4">
+                <canvas id="chartIngVsGast"></canvas>
+            </div>
+        </div>
+
+        <!-- ── Fila inferior: Radar + Recurrentes ── -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+            <!-- Frecuencia de Gastos (radar) -->
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-white font-semibold flex items-center gap-2">
+                        <i class="fa-solid fa-circle-dot text-violet-400"></i>
+                        Frecuencia de Gastos
+                    </h3>
+                    <span class="bg-violet-900/50 text-violet-400 border border-violet-700 text-xs px-3 py-1 rounded-lg font-medium">
+                        SEMANAL
+                    </span>
+                </div>
+                <div class="h-64 flex items-center justify-center">
+                    <canvas id="chartRadar"></canvas>
+                </div>
+            </div>
+
+            <!-- Recurrentes -->
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 flex flex-col">
+                <h3 class="text-white font-semibold flex items-center gap-2 mb-4">
+                    <i class="fa-solid fa-rotate text-violet-400"></i>
+                    Recurrentes
+                </h3>
+
+                @if (!recurrentes.Any())
+                {
+                    <div class="flex-1 flex items-center justify-center text-slate-500 text-sm">
+                        No hay datos suficientes
+                    </div>
+                }
+                else
+                {
+                    <div class="space-y-3 flex-1">
+                        @foreach (var r in recurrentes)
+                        {
+                            <div class="flex items-center gap-3">
+                                <!-- Ícono categoría -->
+                                <div class="w-9 h-9 rounded-xl bg-slate-700 text-slate-400 flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-tag text-xs"></i>
+                                </div>
+                                <!-- Nombre y frecuencia -->
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-white text-sm font-medium truncate">@r.Categoria</p>
+                                    <p class="text-slate-500 text-xs">@r.Veces vez@(r.Veces != 1 ? "es" : "") / período</p>
+                                </div>
+                                <!-- Monto -->
+                                <span class="text-red-400 font-semibold text-sm shrink-0">
+                                    -$@r.TotalGasto.ToString("N2")
+                                </span>
+                            </div>
+                        }
+                    </div>
+
+                    <a href="@Url.Action("Index","Transacciones")"
+                       class="mt-5 w-full flex items-center justify-center gap-2 bg-slate-700 hover:bg-slate-600 border border-slate-600 transition-colors text-slate-300 px-4 py-2.5 rounded-xl text-sm font-medium">
+                        Ver análisis detallado
+                    </a>
+                }
+            </div>
+
         </div>
     }
+
 </main>
 
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script>
+    // ── Datos desde el servidor ──────────────────────
+    const labels       = @Html.Raw(ViewBag.ChartLabels   ?? "[]");
+    const dataIngresos = @Html.Raw(ViewBag.ChartIngresos ?? "[]");
+    const dataGastos   = @Html.Raw(ViewBag.ChartGastos   ?? "[]");
+    const radarLabels  = @Html.Raw(ViewBag.RadarLabels   ?? "[]");
+    const radarData    = @Html.Raw(ViewBag.RadarData     ?? "[]");
+
+    // ── Estilo base ──────────────────────────────────
+    Chart.defaults.color = '#94a3b8';
+    Chart.defaults.font.family = 'Inter, system-ui, sans-serif';
+
+    // ══════════════════════════════════════════════════
+    // 1. GRÁFICA BARRAS — Ingresos vs Gastos
+    // ══════════════════════════════════════════════════
+    new Chart(document.getElementById('chartIngVsGast'), {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [
+                {
+                    label: 'Ingresos',
+                    data: dataIngresos,
+                    backgroundColor: 'rgba(139, 92, 246, 0.85)',  // violet-500
+                    borderRadius: 6,
+                    borderSkipped: false,
+                    barPercentage: 0.5,
+                    categoryPercentage: 0.6
+                },
+                {
+                    label: 'Gastos',
+                    data: dataGastos,
+                    backgroundColor: 'rgba(71, 85, 105, 0.85)',   // slate-600
+                    borderRadius: 6,
+                    borderSkipped: false,
+                    barPercentage: 0.5,
+                    categoryPercentage: 0.6
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: '#1e293b',
+                    borderColor: '#334155',
+                    borderWidth: 1,
+                    callbacks: {
+                        label: ctx => ` $${ctx.parsed.y.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { color: 'rgba(51,65,85,0.5)' },
+                    ticks: { color: '#64748b' }
+                },
+                y: {
+                    grid: { color: 'rgba(51,65,85,0.5)' },
+                    ticks: {
+                        color: '#64748b',
+                        callback: v => `$${v.toLocaleString('es-MX')}`
+                    }
+                }
+            }
+        }
+    });
+
+    // ══════════════════════════════════════════════════
+    // 2. RADAR — Frecuencia semanal de gastos
+    // ══════════════════════════════════════════════════
+    new Chart(document.getElementById('chartRadar'), {
+        type: 'radar',
+        data: {
+            labels: radarLabels,
+            datasets: [{
+                data: radarData,
+                backgroundColor: 'rgba(139, 92, 246, 0.15)',
+                borderColor:     'rgba(168, 85, 247, 0.9)',
+                borderWidth: 2,
+                pointBackgroundColor: 'rgba(168, 85, 247, 1)',
+                pointBorderColor:     '#0f172a',
+                pointRadius: 4,
+                pointHoverRadius: 6,
+                fill: true,
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: '#1e293b',
+                    borderColor: '#334155',
+                    borderWidth: 1,
+                    callbacks: {
+                        label: ctx => ` ${ctx.parsed.r.toFixed(0)}% del pico`
+                    }
+                }
+            },
+            scales: {
+                r: {
+                    min: 0,
+                    max: 100,
+                    backgroundColor: 'transparent',
+                    grid:        { color: 'rgba(51,65,85,0.6)' },
+                    angleLines:  { color: 'rgba(51,65,85,0.6)' },
+                    ticks:       { display: false },
+                    pointLabels: {
+                        color: '#94a3b8',
+                        font: { size: 11, weight: '500' }
+                    }
+                }
+            }
+        }
+    });
+    </script>
+}
