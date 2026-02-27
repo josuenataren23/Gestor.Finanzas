@@ -1,0 +1,162 @@
+@model Gestor.Finanzas.Models.ViewModels.MetaViewModel
+@{
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    ViewBag.Title = "Editar Meta";
+}
+
+<header class="border-b border-slate-800 px-6 py-3 flex items-center gap-3">
+    <a href="@Url.Action("Index", "Metas")" class="text-slate-400 hover:text-white transition-colors">
+        <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <div>
+        <h1 class="text-white font-semibold">Editar Meta</h1>
+        <p class="text-slate-400 text-xs">Actualiza los datos de tu objetivo de ahorro</p>
+    </div>
+</header>
+
+<main class="overflow-y-auto p-6">
+    <div class="max-w-xl mx-auto">
+
+        @using (Html.BeginForm("Edit", "Metas", FormMethod.Post, new { @class = "space-y-5" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.id)
+
+            @* Nombre *@
+            <div>
+                @Html.LabelFor(m => m.nombre, new { @class = "block text-slate-400 text-xs font-semibold uppercase tracking-widest mb-1.5" })
+                @Html.TextBoxFor(m => m.nombre, new {
+                    @class = "w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-violet-500",
+                    placeholder = "Ej. Viaje a Japón"
+                })
+                @Html.ValidationMessageFor(m => m.nombre, "", new { @class = "text-red-400 text-xs mt-1 block" })
+            </div>
+
+            @* Descripción *@
+            <div>
+                @Html.LabelFor(m => m.descripcion, new { @class = "block text-slate-400 text-xs font-semibold uppercase tracking-widest mb-1.5" })
+                @Html.TextBoxFor(m => m.descripcion, new {
+                    @class = "w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-violet-500",
+                    placeholder = "Ej. Vacaciones de verano 2025 (opcional)"
+                })
+                @Html.ValidationMessageFor(m => m.descripcion, "", new { @class = "text-red-400 text-xs mt-1 block" })
+            </div>
+
+            @* Montos *@
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    @Html.LabelFor(m => m.monto_objetivo, new { @class = "block text-slate-400 text-xs font-semibold uppercase tracking-widest mb-1.5" })
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">$</span>
+                        @Html.TextBoxFor(m => m.monto_objetivo, new {
+                            @class = "w-full bg-slate-800 border border-slate-700 rounded-xl pl-7 pr-4 py-3 text-white text-sm focus:outline-none focus:border-violet-500",
+                            type = "number",
+                            step = "0.01",
+                            min = "1"
+                        })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.monto_objetivo, "", new { @class = "text-red-400 text-xs mt-1 block" })
+                </div>
+
+                <div>
+                    @Html.LabelFor(m => m.monto_actual, new { @class = "block text-slate-400 text-xs font-semibold uppercase tracking-widest mb-1.5" })
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">$</span>
+                        @Html.TextBoxFor(m => m.monto_actual, new {
+                            @class = "w-full bg-slate-800 border border-slate-700 rounded-xl pl-7 pr-4 py-3 text-white text-sm focus:outline-none focus:border-violet-500",
+                            type = "number",
+                            step = "0.01",
+                            min = "0"
+                        })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.monto_actual, "", new { @class = "text-red-400 text-xs mt-1 block" })
+                </div>
+            </div>
+
+            @* Fecha Estimada *@
+            <div>
+                @Html.LabelFor(m => m.fecha_estimada, new { @class = "block text-slate-400 text-xs font-semibold uppercase tracking-widest mb-1.5" })
+                @Html.TextBoxFor(m => m.fecha_estimada, "{0:yyyy-MM-dd}", new {
+                    @class = "w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-violet-500",
+                    type = "date"
+                })
+                @Html.ValidationMessageFor(m => m.fecha_estimada, "", new { @class = "text-red-400 text-xs mt-1 block" })
+            </div>
+
+            @* Ícono *@
+            <div>
+                <label class="block text-slate-400 text-xs font-semibold uppercase tracking-widest mb-2">Ícono del Objetivo</label>
+                <div class="grid grid-cols-6 gap-2" id="iconPicker">
+                    @{
+                        var iconos = new[]
+                        {
+                            new { clase = "fa-solid fa-plane",         label = "Viaje"       },
+                            new { clase = "fa-solid fa-laptop",        label = "Tecnología"  },
+                            new { clase = "fa-solid fa-house",         label = "Casa"        },
+                            new { clase = "fa-solid fa-car",           label = "Auto"        },
+                            new { clase = "fa-solid fa-shield-halved", label = "Emergencia"  },
+                            new { clase = "fa-solid fa-graduation-cap",label = "Educación"   },
+                            new { clase = "fa-solid fa-heart-pulse",   label = "Salud"       },
+                            new { clase = "fa-solid fa-piggy-bank",    label = "Ahorro"      },
+                            new { clase = "fa-solid fa-gift",          label = "Regalo"      },
+                            new { clase = "fa-solid fa-ring",          label = "Boda"        },
+                            new { clase = "fa-solid fa-baby",          label = "Bebé"        },
+                            new { clase = "fa-solid fa-wallet",        label = "Finanzas"    },
+                        };
+                    }
+                    @foreach (var ic in iconos)
+                    {
+                        <button type="button"
+                                title="@ic.label"
+                                data-icon="@ic.clase"
+                                onclick="selectIcon(this)"
+                                class="icon-opt w-full aspect-square flex items-center justify-center rounded-xl bg-slate-800 border border-slate-700 hover:border-violet-500 hover:bg-violet-600/20 transition-all">
+                            <i class="@ic.clase text-slate-400 icon-opt-i"></i>
+                        </button>
+                    }
+                </div>
+                @Html.HiddenFor(m => m.icono, new { id = "icono_hidden" })
+            </div>
+
+            @* Botones *@
+            <div class="flex items-center gap-3 pt-2">
+                <button type="submit"
+                        class="flex-1 bg-violet-600 hover:bg-violet-500 text-white font-semibold py-3 rounded-xl transition-colors">
+                    <i class="fa-solid fa-floppy-disk me-2"></i> Guardar Cambios
+                </button>
+                <a href="@Url.Action("Index", "Metas")"
+                   class="flex-1 text-center bg-slate-800 border border-slate-700 hover:bg-slate-700 text-slate-300 font-semibold py-3 rounded-xl transition-colors">
+                    Cancelar
+                </a>
+            </div>
+        }
+
+    </div>
+</main>
+
+@section Scripts {
+<script>
+    function selectIcon(btn) {
+        document.querySelectorAll('.icon-opt').forEach(function (b) {
+            b.classList.remove('border-violet-500', 'bg-violet-600/20');
+            b.classList.add('border-slate-700');
+            b.querySelector('.icon-opt-i').classList.remove('text-violet-400');
+            b.querySelector('.icon-opt-i').classList.add('text-slate-400');
+        });
+        btn.classList.add('border-violet-500', 'bg-violet-600/20');
+        btn.classList.remove('border-slate-700');
+        btn.querySelector('.icon-opt-i').classList.add('text-violet-400');
+        btn.querySelector('.icon-opt-i').classList.remove('text-slate-400');
+        document.getElementById('icono_hidden').value = btn.dataset.icon;
+    }
+
+    // Marcar ícono guardado
+    (function () {
+        var current = document.getElementById('icono_hidden').value;
+        if (current) {
+            var btn = document.querySelector('[data-icon="' + current + '"]');
+            if (btn) selectIcon(btn);
+        }
+    })();
+</script>
+}
