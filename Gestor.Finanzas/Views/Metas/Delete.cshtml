@@ -1,0 +1,96 @@
+@model Gestor.Finanzas.Models.Meta
+@{
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    ViewBag.Title = "Eliminar Meta";
+
+    var pct = Model.monto_objetivo > 0
+        ? (int)Math.Min((Model.monto_actual ?? 0) / Model.monto_objetivo * 100, 100)
+        : 0;
+
+    var iconoMeta = string.IsNullOrEmpty(Model.icono) ? "fa-solid fa-piggy-bank" : Model.icono;
+}
+
+<header class="border-b border-slate-800 px-6 py-3 flex items-center gap-3">
+    <a href="@Url.Action("Index", "Metas")" class="text-slate-400 hover:text-white transition-colors">
+        <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <div>
+        <h1 class="text-white font-semibold">Eliminar Meta</h1>
+        <p class="text-slate-400 text-xs">Esta accion no se puede deshacer</p>
+    </div>
+</header>
+
+<main class="overflow-y-auto p-6">
+    <div class="max-w-md mx-auto">
+
+        <!-- Tarjeta de vista previa de la meta a eliminar -->
+        <div class="bg-slate-800 border border-red-900/40 rounded-2xl p-5 mb-6">
+
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-violet-600/20 flex items-center justify-center flex-shrink-0">
+                    <i class="@iconoMeta text-violet-400"></i>
+                </div>
+                <div>
+                    <p class="text-white font-semibold">@Model.nombre</p>
+                    @if (!string.IsNullOrEmpty(Model.descripcion))
+                    {
+                        <p class="text-slate-400 text-xs">@Model.descripcion</p>
+                    }
+                </div>
+            </div>
+
+            <div class="flex items-baseline gap-1 mb-2">
+                <span class="text-white text-xl font-bold">$@((Model.monto_actual ?? 0).ToString("N2"))</span>
+                <span class="text-slate-400 text-sm">guardados de $@Model.monto_objetivo.ToString("N2")</span>
+            </div>
+
+            <div class="w-full bg-slate-700 rounded-full h-1.5 mb-2">
+                <div class="h-1.5 rounded-full bg-gradient-to-r from-violet-600 to-pink-500"
+                     style="width:@pct%"></div>
+            </div>
+
+            <div class="flex items-center justify-between text-xs text-slate-400">
+                <span>@pct% completado</span>
+                @if (Model.fecha_estimada.HasValue)
+                {
+                    <span>
+                        <i class="fa-regular fa-calendar me-1"></i>
+                        Estimado: @Model.fecha_estimada.Value.ToString("MMM yyyy")
+                    </span>
+                }
+            </div>
+        </div>
+
+        <!-- Alerta de advertencia -->
+        <div class="flex items-start gap-3 bg-red-900/20 border border-red-800/50 text-red-300 rounded-xl px-4 py-3 mb-6 text-sm">
+            <i class="fa-solid fa-triangle-exclamation text-red-400 mt-0.5 flex-shrink-0"></i>
+            <div>
+                <p class="font-semibold text-red-300 mb-1"> Atencion </p>
+                <p class="text-red-400/80 text-xs">
+                    Se eliminara permanentemente el objetivo
+                    <strong class="text-red-300">@Model.nombre</strong>
+                    y todo su progreso de ahorro ($@((Model.monto_actual ?? 0).ToString("N2"))).
+                    No podras recuperarla.
+                </p>
+            </div>
+        </div>
+
+        <!-- Botones de confirmación -->
+        @using (Html.BeginForm("Delete", "Metas", new { id = Model.id }, FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="flex items-center gap-3">
+                <button type="submit"
+                        class="flex-1 bg-red-600 hover:bg-red-500 text-white font-semibold py-3 rounded-xl transition-colors">
+                    <i class="fa-solid fa-trash me-2"></i> Si, eliminar
+                </button>
+                <a href="@Url.Action("Index", "Metas")"
+                   class="flex-1 text-center bg-slate-800 border border-slate-700 hover:bg-slate-700 text-slate-300 font-semibold py-3 rounded-xl transition-colors">
+                    Cancelar
+                </a>
+            </div>
+        }
+
+    </div>
+</main>
