@@ -1,24 +1,226 @@
-﻿
+@model IEnumerable<Gestor.Finanzas.Models.Meta>
 @{
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
-    ViewBag.Title = "Metas";
+    ViewBag.Title = "Metas de Ahorro";
+
     var empty = ViewBag.EmptyState as Gestor.Finanzas.Models.ViewModels.EmptyStateViewModel;
+
+    decimal totalAcumulado = ViewBag.TotalAcumulado != null ? (decimal)ViewBag.TotalAcumulado : 0m;
+    int metasActivas       = ViewBag.MetasActivas != null ? (int)ViewBag.MetasActivas : 0;
+    decimal ahorroPromedio = ViewBag.AhorroPromedio != null ? (decimal)ViewBag.AhorroPromedio : 0m;
+
+    var proximaMeta = ViewBag.ProximaMeta as Gestor.Finanzas.Models.Meta;
 }
 
-<header class="dark:bg-slate-900 border-b border-slate-800">
+<header class="border-b border-slate-800 px-6 py-3 flex items-center gap-4">
+    <div class="flex-1">
+        <div class="relative max-w-sm">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
+            <input type="text" id="buscarMeta" placeholder="Buscar metas..."
+                   class="w-full bg-slate-800 border border-slate-700 rounded-lg pl-9 pr-4 py-2 text-sm text-slate-300 placeholder-slate-500 focus:outline-none focus:border-violet-500" />
+        </div>
+    </div>
+    <a href="@Url.Action("Create", "Metas")"
+       class="flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors">
+        <i class="fa-solid fa-plus"></i> Crear Nueva Meta
+    </a>
+    <button class="text-slate-400 hover:text-white transition-colors">
+        <i class="fa-regular fa-bell text-lg"></i>
+    </button>
 </header>
 
-<main class="overflow-y-auto p-6 ">
+<main class="overflow-y-auto p-6">
+
+    @if (TempData["Success"] != null)
+    {
+        <div id="alertSuccess"
+             class="mb-6 flex items-center gap-3 bg-emerald-900/40 border border-emerald-700 text-emerald-300 rounded-xl px-4 py-3 text-sm">
+            <i class="fa-solid fa-circle-check text-emerald-400"></i>
+            @TempData["Success"]
+            <button onclick="document.getElementById('alertSuccess').remove()"
+                    class="ml-auto text-emerald-400 hover:text-white">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+    }
+
     @if (empty != null)
     {
         @Html.Partial("_EmptyState", empty)
     }
     else
     {
-        <!-- DASHBOARD NORMAL -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- cards -->
+        <!-- Stats superiores -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+
+            <!-- Total Acumulado -->
+            <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-5 border border-slate-700 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-violet-600/10 rounded-full -translate-y-8 translate-x-8"></div>
+                <p class="text-slate-400 text-xs font-semibold uppercase tracking-widest mb-1">Total Meta Acumulada</p>
+                <p class="text-white text-3xl font-bold mt-1">$@totalAcumulado.ToString("N2")</p>
+                @if (proximaMeta != null)
+                {
+                    var pctProxima = proximaMeta.monto_objetivo > 0
+                        ? (int)Math.Min((proximaMeta.monto_actual ?? 0) / proximaMeta.monto_objetivo * 100, 100)
+                        : 0;
+                    <p class="text-emerald-400 text-xs mt-2 flex items-center gap-1">
+                        <i class="fa-solid fa-arrow-trend-up"></i>
+                        <span>+@pctProxima%</span>
+                        <span class="text-slate-500 ml-1">vs mes anterior</span>
+                    </p>
+                }
+            </div>
+
+            <!-- Metas Activas -->
+            <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-5 border border-slate-700 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-violet-600/10 rounded-full -translate-y-8 translate-x-8"></div>
+                <p class="text-slate-400 text-xs font-semibold uppercase tracking-widest mb-1">Metas en Curso</p>
+                <p class="text-white text-3xl font-bold mt-1">@metasActivas <span class="text-xl font-medium text-slate-400">Activas</span></p>
+                @if (proximaMeta != null)
+                {
+                    <p class="text-slate-400 text-xs mt-2">
+                        Proxima a completar: <span class="text-violet-400 font-medium">@proximaMeta.nombre</span>
+                    </p>
+                }
+            </div>
+
+            <!-- Ahorro Promedio -->
+            <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-5 border border-slate-700 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-violet-600/10 rounded-full -translate-y-8 translate-x-8"></div>
+                <p class="text-slate-400 text-xs font-semibold uppercase tracking-widest mb-1">Ahorro Mensual Promedio</p>
+                <p class="text-white text-3xl font-bold mt-1">$@ahorroPromedio.ToString("N2")</p>
+                <div class="mt-2 h-1.5 w-3/4 bg-slate-700 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-violet-600 to-pink-500 rounded-full" style="width:65%"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Sección de Objetivos -->
+        <div class="mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-flag text-violet-400"></i>
+            <h2 class="text-white font-semibold text-lg">Mis Objetivos</h2>
+        </div>
+
+        <div id="gridMetas" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+
+            @foreach (var meta in Model)
+            {
+                var pct = meta.monto_objetivo > 0
+                    ? (int)Math.Min((meta.monto_actual ?? 0) / meta.monto_objetivo * 100, 100)
+                    : 0;
+
+                var completada = pct >= 100;
+                var iconoMeta  = string.IsNullOrEmpty(meta.icono) ? "fa-solid fa-piggy-bank" : meta.icono;
+
+                <div class="meta-card bg-slate-800/80 border border-slate-700 rounded-2xl p-5 flex flex-col gap-4 hover:border-violet-600/50 transition-all"
+                     data-nombre="@meta.nombre.ToLower()">
+
+                    <!-- Cabecera -->
+                    <div class="flex items-start justify-between">
+                        <div class="w-10 h-10 rounded-xl bg-violet-600/20 flex items-center justify-center flex-shrink-0">
+                            <i class="@iconoMeta text-violet-400"></i>
+                        </div>
+                        <div class="relative" x-data="{ open: false }">
+                            <button onclick="toggleMenu(this)" class="text-slate-500 hover:text-white p-1 rounded transition-colors">
+                                <i class="fa-solid fa-ellipsis"></i>
+                            </button>
+                            <div class="dropdown-menu hidden absolute right-0 mt-1 w-36 bg-slate-900 border border-slate-700 rounded-xl shadow-xl z-10 py-1">
+                                <a href="@Url.Action("Edit", "Metas", new { id = meta.id })"
+                                   class="flex items-center gap-2 px-3 py-2 text-sm text-slate-300 hover:text-white hover:bg-slate-800 transition-colors">
+                                    <i class="fa-solid fa-pencil text-violet-400 w-4"></i> Editar
+                                </a>
+                                <a href="@Url.Action("Delete", "Metas", new { id = meta.id })"
+                                   class="flex items-center gap-2 px-3 py-2 text-sm text-slate-300 hover:text-red-400 hover:bg-slate-800 transition-colors">
+                                    <i class="fa-solid fa-trash text-red-400 w-4"></i> Eliminar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Monto y barra de progreso -->
+                    <div>
+                        <div class="flex items-baseline gap-1 mb-1">
+                            <span class="text-white text-2xl font-bold">$@((meta.monto_actual ?? 0).ToString("N2"))</span>
+                            <span class="text-slate-400 text-sm">de $@meta.monto_objetivo.ToString("N2")</span>
+                        </div>
+
+                        <div class="w-full bg-slate-700 rounded-full h-1.5 mb-1">
+                            <div class="h-1.5 rounded-full transition-all @(completada ? "bg-emerald-500" : "bg-gradient-to-r from-violet-600 to-pink-500")"
+                                 style="width:@pct%"></div>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs @(completada ? "text-emerald-400" : "text-violet-400") font-medium">
+                                @pct% @(completada ? "Completado ✓" : "Completado")
+                            </span>
+                            @if (!completada)
+                            {
+                                var faltante = meta.monto_objetivo - (meta.monto_actual ?? 0);
+                                <span class="text-xs text-slate-500">Faltan $@faltante.ToString("N2")</span>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Nombre y descripción -->
+                    <div class="border-t border-slate-700 pt-3">
+                        <p class="text-white font-semibold">@meta.nombre</p>
+                        @if (!string.IsNullOrEmpty(meta.descripcion))
+                        {
+                            <p class="text-slate-400 text-xs mt-0.5 truncate">@meta.descripcion</p>
+                        }
+                    </div>
+
+                    <!-- Fecha estimada -->
+                    @if (meta.fecha_estimada.HasValue)
+                    {
+                        <div class="flex items-center gap-1.5 text-slate-500 text-xs">
+                            <i class="fa-regular fa-calendar"></i>
+                            <span>Estimado: @meta.fecha_estimada.Value.ToString("MMM yyyy")</span>
+                        </div>
+                    }
+                </div>
+            }
+
+            <!-- Tarjeta añadir -->
+            <a href="@Url.Action("Create", "Metas")"
+               class="border-2 border-dashed border-slate-700 rounded-2xl p-5 flex flex-col items-center justify-center gap-3 hover:border-violet-600/60 hover:bg-violet-600/5 transition-all min-h-[200px] group">
+                <div class="w-10 h-10 rounded-xl bg-slate-700 group-hover:bg-violet-600/20 flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-plus text-slate-400 group-hover:text-violet-400 transition-colors"></i>
+                </div>
+                <span class="text-slate-400 group-hover:text-slate-300 text-sm transition-colors">Agregar Nuevo Objetivo</span>
+            </a>
+
         </div>
     }
 </main>
 
+@section Scripts {
+<script>
+    // Buscador en tiempo real
+    document.getElementById('buscarMeta')?.addEventListener('input', function () {
+        var q = this.value.toLowerCase().trim();
+        document.querySelectorAll('.meta-card').forEach(function (card) {
+            var nombre = card.dataset.nombre || '';
+            card.closest('.meta-card') && (card.style.display = nombre.includes(q) ? '' : 'none');
+        });
+    });
+
+    // Dropdown de acciones
+    function toggleMenu(btn) {
+        var menu = btn.nextElementSibling;
+        document.querySelectorAll('.dropdown-menu').forEach(function (m) {
+            if (m !== menu) m.classList.add('hidden');
+        });
+        menu.classList.toggle('hidden');
+    }
+
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('[onclick="toggleMenu(this)"]')) {
+            document.querySelectorAll('.dropdown-menu').forEach(function (m) {
+                m.classList.add('hidden');
+            });
+        }
+    });
+</script>
+}

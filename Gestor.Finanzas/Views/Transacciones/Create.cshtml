@@ -1,7 +1,7 @@
 ﻿@model Gestor.Finanzas.Models.ViewModels.TransaccionViewModel
 @{
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
-    ViewBag.Title = "Nueva Transacción";
+    ViewBag.Title = "Nueva Transaccion";
 }
 
 <!-- ═════════ HEADER ═════════ -->
@@ -57,7 +57,7 @@
 
                 <!-- Categoría -->
                 <div class="mb-5" id="cat-group">
-                    <label class="block text-slate-300 text-sm font-semibold mb-1">Categoría</label>
+                    <label class="block text-slate-300 text-sm font-semibold mb-1">Categoria</label>
                     @Html.DropDownList(
                         "categoria_id",
                         null,
@@ -89,7 +89,7 @@
 
                 <!-- Descripción -->
                 <div class="mb-6">
-                    <label class="block text-slate-300 text-sm font-semibold mb-1">Descripción</label>
+                    <label class="block text-slate-300 text-sm font-semibold mb-1">Descripcion</label>
                     @Html.TextAreaFor(m => m.descripcion, 3, 0, new {
                         @class = "w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-300 placeholder-slate-500 focus:outline-none focus:border-violet-500",
                         placeholder = "Descripción opcional…"
@@ -100,7 +100,7 @@
                 <!-- Info -->
                 <div class="mb-6 flex items-start gap-2 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-400 text-xs">
                     <i class="fa-solid fa-circle-info mt-0.5"></i>
-                    <span>La fecha y hora se registran automáticamente al guardar.</span>
+                    <span>La fecha y hora se registran automaticamente al guardar.</span>
                 </div>
 
                 <!-- Acciones -->

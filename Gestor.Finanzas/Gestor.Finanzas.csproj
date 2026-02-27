@@ -160,6 +160,7 @@
     <Compile Include="Models\Transaccione.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Models\ViewModels\EmptyStateViewModel.cs" />
+    <Compile Include="Models\ViewModels\MetaViewModel.cs" />
     <Compile Include="Models\ViewModels\PresupuestoViewModel.cs" />
     <Compile Include="Models\ViewModels\TransaccionViewModel.cs" />
     <Compile Include="Startup.Auth.cs" />

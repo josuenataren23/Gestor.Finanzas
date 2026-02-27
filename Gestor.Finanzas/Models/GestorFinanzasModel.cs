@@ -53,6 +53,14 @@ namespace Gestor.Finanzas.Models
                 .Property(e => e.monto_actual)
                 .HasPrecision(10, 2);
 
+            modelBuilder.Entity<Meta>()
+                .Property(e => e.descripcion)
+                .IsUnicode(true);
+
+            modelBuilder.Entity<Meta>()
+                .Property(e => e.icono)
+                .IsUnicode(true);
+
             modelBuilder.Entity<Presupuesto>()
                 .Property(e => e.monto_objetivo)
                 .HasPrecision(10, 2);

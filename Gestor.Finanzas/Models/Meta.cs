@@ -25,5 +25,11 @@ namespace Gestor.Finanzas.Models
         public DateTime? fecha_cumplimiento { get; set; }
 
         public virtual Usuario Usuario { get; set; }
+
+        public string    descripcion        { get; set; }
+
+        public DateTime? fecha_estimada     { get; set; }
+
+        public string    icono              { get; set; }
     }
 }
