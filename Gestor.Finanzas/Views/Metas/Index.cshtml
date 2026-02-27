@@ -6,7 +6,7 @@
     var empty = ViewBag.EmptyState as Gestor.Finanzas.Models.ViewModels.EmptyStateViewModel;
 
     decimal totalAcumulado = ViewBag.TotalAcumulado != null ? (decimal)ViewBag.TotalAcumulado : 0m;
-    int metasActivas       = ViewBag.MetasActivas != null ? (int)ViewBag.MetasActivas : 0;
+    int metasActivas = ViewBag.MetasActivas != null ? (int)ViewBag.MetasActivas : 0;
     decimal ahorroPromedio = ViewBag.AhorroPromedio != null ? (decimal)ViewBag.AhorroPromedio : 0m;
 
     var proximaMeta = ViewBag.ProximaMeta as Gestor.Finanzas.Models.Meta;
@@ -31,14 +31,27 @@
 
 <main class="overflow-y-auto p-6">
 
+    @* Alerta de éxito *@
     @if (TempData["Success"] != null)
     {
         <div id="alertSuccess"
              class="mb-6 flex items-center gap-3 bg-emerald-900/40 border border-emerald-700 text-emerald-300 rounded-xl px-4 py-3 text-sm">
             <i class="fa-solid fa-circle-check text-emerald-400"></i>
             @TempData["Success"]
-            <button onclick="document.getElementById('alertSuccess').remove()"
-                    class="ml-auto text-emerald-400 hover:text-white">
+            <button onclick="document.getElementById('alertSuccess').remove()" class="ml-auto text-emerald-400 hover:text-white">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+    }
+
+    @* Alerta de error *@
+    @if (TempData["Error"] != null)
+    {
+        <div id="alertError"
+             class="mb-6 flex items-center gap-3 bg-red-900/40 border border-red-700 text-red-300 rounded-xl px-4 py-3 text-sm">
+            <i class="fa-solid fa-triangle-exclamation text-red-400"></i>
+            @TempData["Error"]
+            <button onclick="document.getElementById('alertError').remove()" class="ml-auto text-red-400 hover:text-white">
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
@@ -53,7 +66,6 @@
         <!-- Stats superiores -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
 
-            <!-- Total Acumulado -->
             <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-5 border border-slate-700 relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-24 h-24 bg-violet-600/10 rounded-full -translate-y-8 translate-x-8"></div>
                 <p class="text-slate-400 text-xs font-semibold uppercase tracking-widest mb-1">Total Meta Acumulada</p>
@@ -71,7 +83,6 @@
                 }
             </div>
 
-            <!-- Metas Activas -->
             <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-5 border border-slate-700 relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-24 h-24 bg-violet-600/10 rounded-full -translate-y-8 translate-x-8"></div>
                 <p class="text-slate-400 text-xs font-semibold uppercase tracking-widest mb-1">Metas en Curso</p>
@@ -79,12 +90,11 @@
                 @if (proximaMeta != null)
                 {
                     <p class="text-slate-400 text-xs mt-2">
-                        Proxima a completar: <span class="text-violet-400 font-medium">@proximaMeta.nombre</span>
+                        Próxima a completar: <span class="text-violet-400 font-medium">@proximaMeta.nombre</span>
                     </p>
                 }
             </div>
 
-            <!-- Ahorro Promedio -->
             <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-5 border border-slate-700 relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-24 h-24 bg-violet-600/10 rounded-full -translate-y-8 translate-x-8"></div>
                 <p class="text-slate-400 text-xs font-semibold uppercase tracking-widest mb-1">Ahorro Mensual Promedio</p>
@@ -96,22 +106,21 @@
 
         </div>
 
-        <!-- Sección de Objetivos -->
+        <!-- Título sección -->
         <div class="mb-4 flex items-center gap-2">
             <i class="fa-solid fa-flag text-violet-400"></i>
             <h2 class="text-white font-semibold text-lg">Mis Objetivos</h2>
         </div>
 
+        <!-- Grid de tarjetas -->
         <div id="gridMetas" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
 
             @foreach (var meta in Model)
             {
-                var pct = meta.monto_objetivo > 0
-                    ? (int)Math.Min((meta.monto_actual ?? 0) / meta.monto_objetivo * 100, 100)
-                    : 0;
-
+                var pct = meta.monto_objetivo > 0 ? (int)Math.Min((meta.monto_actual ?? 0) / meta.monto_objetivo * 100, 100) : 0;
                 var completada = pct >= 100;
-                var iconoMeta  = string.IsNullOrEmpty(meta.icono) ? "fa-solid fa-piggy-bank" : meta.icono;
+                var iconoMeta = string.IsNullOrEmpty(meta.icono) ? "fa-solid fa-piggy-bank" : meta.icono;
+                var disponible = meta.monto_objetivo - (meta.monto_actual ?? 0);
 
                 <div class="meta-card bg-slate-800/80 border border-slate-700 rounded-2xl p-5 flex flex-col gap-4 hover:border-violet-600/50 transition-all"
                      data-nombre="@meta.nombre.ToLower()">
@@ -121,7 +130,7 @@
                         <div class="w-10 h-10 rounded-xl bg-violet-600/20 flex items-center justify-center flex-shrink-0">
                             <i class="@iconoMeta text-violet-400"></i>
                         </div>
-                        <div class="relative" x-data="{ open: false }">
+                        <div class="relative">
                             <button onclick="toggleMenu(this)" class="text-slate-500 hover:text-white p-1 rounded transition-colors">
                                 <i class="fa-solid fa-ellipsis"></i>
                             </button>
@@ -138,31 +147,28 @@
                         </div>
                     </div>
 
-                    <!-- Monto y barra de progreso -->
+                    <!-- Monto y barra -->
                     <div>
                         <div class="flex items-baseline gap-1 mb-1">
                             <span class="text-white text-2xl font-bold">$@((meta.monto_actual ?? 0).ToString("N2"))</span>
                             <span class="text-slate-400 text-sm">de $@meta.monto_objetivo.ToString("N2")</span>
                         </div>
-
                         <div class="w-full bg-slate-700 rounded-full h-1.5 mb-1">
                             <div class="h-1.5 rounded-full transition-all @(completada ? "bg-emerald-500" : "bg-gradient-to-r from-violet-600 to-pink-500")"
                                  style="width:@pct%"></div>
                         </div>
-
                         <div class="flex items-center justify-between">
                             <span class="text-xs @(completada ? "text-emerald-400" : "text-violet-400") font-medium">
                                 @pct% @(completada ? "Completado ✓" : "Completado")
                             </span>
                             @if (!completada)
                             {
-                                var faltante = meta.monto_objetivo - (meta.monto_actual ?? 0);
-                                <span class="text-xs text-slate-500">Faltan $@faltante.ToString("N2")</span>
+                                <span class="text-xs text-slate-500">Faltan $@disponible.ToString("N2")</span>
                             }
                         </div>
                     </div>
 
-                    <!-- Nombre y descripción -->
+                    <!-- Nombre -->
                     <div class="border-t border-slate-700 pt-3">
                         <p class="text-white font-semibold">@meta.nombre</p>
                         @if (!string.IsNullOrEmpty(meta.descripcion))
@@ -171,14 +177,37 @@
                         }
                     </div>
 
-                    <!-- Fecha estimada -->
-                    @if (meta.fecha_estimada.HasValue)
-                    {
-                        <div class="flex items-center gap-1.5 text-slate-500 text-xs">
-                            <i class="fa-regular fa-calendar"></i>
-                            <span>Estimado: @meta.fecha_estimada.Value.ToString("MMM yyyy")</span>
-                        </div>
-                    }
+                    <!-- Fecha y botón Abonar -->
+                    <div class="flex items-center justify-between">
+                        @if (meta.fecha_estimada.HasValue)
+                        {
+                            <span class="flex items-center gap-1.5 text-slate-500 text-xs">
+                                <i class="fa-regular fa-calendar"></i>
+                                Estimado: @meta.fecha_estimada.Value.ToString("MMM yyyy")
+                            </span>
+                        }
+                        else
+                        {
+                            <span></span>
+                        }
+
+                        @if (!completada)
+                        {
+                            <!-- Botón Abonar: abre el modal con datos de esta meta -->
+                            <button type="button"
+                                    onclick="abrirModalAhorro(@meta.id, '@Html.Raw(meta.nombre.Replace("'", "\\'"))', @disponible.ToString("F2", System.Globalization.CultureInfo.InvariantCulture))"
+                                    class="flex items-center gap-1.5 bg-violet-600/20 hover:bg-violet-600/40 text-violet-400 hover:text-violet-300 text-xs font-semibold px-3 py-1.5 rounded-lg transition-all">
+                                <i class="fa-solid fa-plus"></i> Abonar
+                            </button>
+                        }
+                        else
+                        {
+                            <span class="text-emerald-400 text-xs font-semibold flex items-center gap-1">
+                                <i class="fa-solid fa-circle-check"></i> Completada
+                            </span>
+                        }
+                    </div>
+
                 </div>
             }
 
@@ -188,39 +217,172 @@
                 <div class="w-10 h-10 rounded-xl bg-slate-700 group-hover:bg-violet-600/20 flex items-center justify-center transition-colors">
                     <i class="fa-solid fa-plus text-slate-400 group-hover:text-violet-400 transition-colors"></i>
                 </div>
-                <span class="text-slate-400 group-hover:text-slate-300 text-sm transition-colors">Agregar Nuevo Objetivo</span>
+                <span class="text-slate-400 group-hover:text-slate-300 text-sm transition-colors">Añadir Nuevo Objetivo</span>
             </a>
 
         </div>
     }
 </main>
 
-@section Scripts {
-<script>
-    // Buscador en tiempo real
-    document.getElementById('buscarMeta')?.addEventListener('input', function () {
-        var q = this.value.toLowerCase().trim();
-        document.querySelectorAll('.meta-card').forEach(function (card) {
-            var nombre = card.dataset.nombre || '';
-            card.closest('.meta-card') && (card.style.display = nombre.includes(q) ? '' : 'none');
-        });
-    });
+<!-- =====================  MODAL ABONAR  ===================== -->
+<div id="modalAhorro"
+     class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
+     onclick="if(event.target===this) cerrarModalAhorro()">
 
-    // Dropdown de acciones
-    function toggleMenu(btn) {
-        var menu = btn.nextElementSibling;
-        document.querySelectorAll('.dropdown-menu').forEach(function (m) {
-            if (m !== menu) m.classList.add('hidden');
-        });
-        menu.classList.toggle('hidden');
-    }
+    <!-- Fondo oscuro -->
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
 
-    document.addEventListener('click', function (e) {
-        if (!e.target.closest('[onclick="toggleMenu(this)"]')) {
-            document.querySelectorAll('.dropdown-menu').forEach(function (m) {
-                m.classList.add('hidden');
-            });
+    <!-- Contenido del modal -->
+    <div class="relative bg-slate-900 border border-slate-700 rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+
+        <!-- Cabecera -->
+        <div class="flex items-center justify-between mb-5">
+            <div>
+                <h3 class="text-white font-semibold text-base">Registrar Abono</h3>
+                <p id="modalNombreMeta" class="text-violet-400 text-sm font-medium mt-0.5"></p>
+            </div>
+            <button onclick="cerrarModalAhorro()" class="text-slate-500 hover:text-white transition-colors">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Disponible restante -->
+        <div class="bg-slate-800 rounded-xl px-4 py-3 mb-4 flex items-center justify-between">
+            <span class="text-slate-400 text-sm">Disponible para completar</span>
+            <span id="modalDisponible" class="text-emerald-400 font-semibold text-sm"></span>
+        </div>
+
+        <!-- Formulario -->
+        @using (Html.BeginForm("AgregarAhorro", "Metas", FormMethod.Post, new { id = "formAhorro" }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" id="modalMetaId" value="" />
+
+            <div class="mb-4">
+                <label class="block text-slate-400 text-xs font-semibold uppercase tracking-widest mb-1.5">
+                    ¿Cuánto deseas abonar?
+                </label>
+                <div class="relative">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-medium">$</span>
+                    <input type="number"
+                           name="monto"
+                           id="modalMonto"
+                           min="0.01"
+                           step="0.01"
+                           placeholder="0.00"
+                           required
+                           class="w-full bg-slate-800 border border-slate-700 rounded-xl pl-7 pr-4 py-3 text-white text-sm focus:outline-none focus:border-violet-500" />
+                </div>
+                <p id="modalError" class="text-red-400 text-xs mt-1 hidden"></p>
+            </div>
+
+            <!-- Atajos rápidos -->
+            <div class="flex gap-2 mb-5" id="atajosRapidos">
+                <button type="button" onclick="setMonto(100)"
+                        class="flex-1 text-xs bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 py-2 rounded-lg transition-colors">
+                    +$100
+                </button>
+                <button type="button" onclick="setMonto(500)"
+                        class="flex-1 text-xs bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 py-2 rounded-lg transition-colors">
+                    +$500
+                </button>
+                <button type="button" onclick="setMonto(1000)"
+                        class="flex-1 text-xs bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 py-2 rounded-lg transition-colors">
+                    +$1,000
+                </button>
+                <button type="button" id="btnTodo" onclick="setMontoMax()"
+                        class="flex-1 text-xs bg-violet-600/20 hover:bg-violet-600/40 border border-violet-700/50 text-violet-400 py-2 rounded-lg transition-colors">
+                    Todo
+                </button>
+            </div>
+
+            <div class="flex gap-3">
+                <button type="submit"
+                        class="flex-1 bg-violet-600 hover:bg-violet-500 text-white font-semibold py-3 rounded-xl transition-colors">
+                    <i class="fa-solid fa-piggy-bank me-2"></i> Abonar
+                </button>
+                <button type="button" onclick="cerrarModalAhorro()"
+                        class="flex-1 bg-slate-800 border border-slate-700 hover:bg-slate-700 text-slate-300 font-semibold py-3 rounded-xl transition-colors">
+                    Cancelar
+                </button>
+            </div>
         }
-    });
-</script>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var modalDisponibleMax = 0;
+
+        // Abrir modal con datos de la meta seleccionada
+        function abrirModalAhorro(id, nombre, disponible) {
+            modalDisponibleMax = disponible;
+            document.getElementById('modalMetaId').value = id;
+            document.getElementById('modalNombreMeta').textContent = nombre;
+            document.getElementById('modalDisponible').textContent = '$' + disponible.toFixed(2);
+            document.getElementById('modalMonto').value = '';
+            document.getElementById('modalMonto').max = disponible;
+            document.getElementById('modalError').classList.add('hidden');
+            document.getElementById('modalAhorro').classList.remove('hidden');
+            setTimeout(function () { document.getElementById('modalMonto').focus(); }, 100);
+        }
+
+        function cerrarModalAhorro() {
+            document.getElementById('modalAhorro').classList.add('hidden');
+        }
+
+        // Atajos rápidos de monto
+        function setMonto(valor) {
+            document.getElementById('modalMonto').value = Math.min(valor, modalDisponibleMax).toFixed(2);
+        }
+
+        function setMontoMax() {
+            document.getElementById('modalMonto').value = modalDisponibleMax.toFixed(2);
+        }
+
+        // Validación antes de enviar
+        document.getElementById('formAhorro').addEventListener('submit', function (e) {
+            var monto = parseFloat(document.getElementById('modalMonto').value);
+            var err = document.getElementById('modalError');
+
+            if (!monto || monto <= 0) {
+                e.preventDefault();
+                err.textContent = 'Ingresa un monto mayor a $0.';
+                err.classList.remove('hidden');
+                return;
+            }
+            if (monto > modalDisponibleMax) {
+                e.preventDefault();
+                err.textContent = 'El monto supera lo disponible ($' + modalDisponibleMax.toFixed(2) + ').';
+                err.classList.remove('hidden');
+                return;
+            }
+            err.classList.add('hidden');
+        });
+
+        // Buscador en tiempo real
+        document.getElementById('buscarMeta')?.addEventListener('input', function () {
+            var q = this.value.toLowerCase().trim();
+            document.querySelectorAll('.meta-card').forEach(function (card) {
+                card.style.display = (card.dataset.nombre || '').includes(q) ? '' : 'none';
+            });
+        });
+
+        // Dropdown de acciones (editar / eliminar)
+        function toggleMenu(btn) {
+            var menu = btn.nextElementSibling;
+            document.querySelectorAll('.dropdown-menu').forEach(function (m) {
+                if (m !== menu) m.classList.add('hidden');
+            });
+            menu.classList.toggle('hidden');
+        }
+
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('[onclick^="toggleMenu"]')) {
+                document.querySelectorAll('.dropdown-menu').forEach(function (m) {
+                    m.classList.add('hidden');
+                });
+            }
+        });
+    </script>
 }
