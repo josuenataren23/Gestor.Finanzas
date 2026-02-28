@@ -8,15 +8,21 @@
     <link rel="stylesheet" href="~/Content/fontawesome/css/all.min.css" />
 </head>
 <body class="dark:bg-slate-950 dark:text-slate-100">
-    <div class="grid grid-cols-[260px_1fr] grid-rows-[64px_1fr] h-screen">
+    <div class="grid md:grid-cols-[260px_1fr] md:grid-rows-[64px_1fr] h-screen">
 
-        <aside class="row-span-2 dark:bg-slate-900 border-r border-slate-800 flex flex-col h-screen justify-between">
+        <aside id="sidebar" class="md:row-span-2 dark:bg-slate-900 border-r border-slate-800 flex flex-col h-screen justify-between max-md:fixed max-md:top-0 max-md:left-0 max-md:z-50 max-md:w-1/2 max-md:-translate-x-full transition-transform
+        duration-300">
             <div class="w-full flex flex-col p-4">
-                <a href="@Url.Action("Index", "Home")">
-                    <h1 class="text-2xl">
-                        <i class="fa-solid fa-coins text-purple-700 dark:text-purple-500"></i> FinTrack
-                    </h1>
-                </a>
+                <div class="w-full flex items-center justify-between">
+                    <a href="@Url.Action("Index", "Home")">
+                        <h1 class="text-2xl">
+                            <i class="fa-solid fa-coins text-purple-700 dark:text-purple-500"></i> FinTrack
+                        </h1>
+                    </a>
+
+                    <button class="text-slate-400 hover:text-white transition-colors md:hidden " id="menu-close">
+                        <i class="fa-solid fa-bars"></i>
+                </div>
 
                 <nav>
                     <ul class="flex flex-col mt-16">
@@ -85,15 +91,6 @@
     </div>
 
     <script>
-        // Tema oscuro por defecto
-        const html = document.documentElement;
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light') {
-            html.classList.remove('dark');
-        } else {
-            html.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
-        }
 
         // Modal usuario
         const userButton = document.getElementById("user");
@@ -112,5 +109,36 @@
     </script>
 
     @RenderSection("Scripts", required: false)
+
+    <script>
+    const sidebar = document.getElementById("sidebar");
+    const openBtn = document.getElementById("menu-toggle");
+    const closeBtn = document.getElementById("menu-close");
+
+    // Abrir
+    if (openBtn) {
+        openBtn.addEventListener("click", () => {
+            sidebar.classList.remove("max-md:-translate-x-full");
+        });
+    }
+
+    // Cerrar
+    if (closeBtn) {
+        closeBtn.addEventListener("click", () => {
+            sidebar.classList.add("max-md:-translate-x-full");
+        });
+    }
+
+    // Click fuera
+    document.addEventListener("click", (e) => {
+        if (
+            window.innerWidth < 768 &&
+            !sidebar.contains(e.target) &&
+            !openBtn?.contains(e.target)
+        ) {
+            sidebar.classList.add("max-md:-translate-x-full");
+        }
+    });
+</script>
 </body>
 </html>

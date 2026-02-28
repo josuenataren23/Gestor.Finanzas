@@ -33,7 +33,6 @@ namespace Gestor.Finanzas.Controllers
                 return View(metas);
             }
 
-            // Stats para las tarjetas superiores
             var totalAcumulado = metas.Sum(m => m.monto_actual ?? 0);
             var metasActivas = metas.Count(m => (m.monto_actual ?? 0) < m.monto_objetivo);
             var ahorroPromedio = metas.Any() ? Math.Round(totalAcumulado / metas.Count, 2) : 0;
@@ -53,10 +52,7 @@ namespace Gestor.Finanzas.Controllers
         // GET: Metas/Create
         public ActionResult Create()
         {
-            return View(new MetaViewModel
-            {
-                icono = "fa-solid fa-piggy-bank"
-            });
+            return View(new MetaViewModel { icono = "fa-solid fa-piggy-bank" });
         }
 
         // POST: Metas/Create
@@ -67,7 +63,6 @@ namespace Gestor.Finanzas.Controllers
             if (!ModelState.IsValid)
                 return View(vm);
 
-            // El monto actual no puede superar al objetivo
             if ((vm.monto_actual ?? 0) > vm.monto_objetivo)
                 ModelState.AddModelError("monto_actual", "El monto guardado no puede superar el monto objetivo.");
 
@@ -78,15 +73,14 @@ namespace Gestor.Finanzas.Controllers
 
             db.Metas.Add(new Meta
             {
-                usuario_id     = UsuarioActualId,
-                nombre         = vm.nombre,
-                descripcion    = vm.descripcion,
+                usuario_id = UsuarioActualId,
+                nombre = vm.nombre,
+                descripcion = vm.descripcion,
                 monto_objetivo = vm.monto_objetivo,
-                monto_actual   = montoActual,
+                monto_actual = montoActual,
                 fecha_estimada = vm.fecha_estimada,
-                icono          = string.IsNullOrWhiteSpace(vm.icono) ? "fa-solid fa-piggy-bank" : vm.icono,
-                fecha_creacion     = DateTime.Now,
-                // Si al crear ya se cumple el objetivo, se registra la fecha de cumplimiento
+                icono = string.IsNullOrWhiteSpace(vm.icono) ? "fa-solid fa-piggy-bank" : vm.icono,
+                fecha_creacion = DateTime.Now,
                 fecha_cumplimiento = montoActual >= vm.monto_objetivo ? (DateTime?)DateTime.Now : null
             });
 
@@ -105,13 +99,13 @@ namespace Gestor.Finanzas.Controllers
 
             return View(new MetaViewModel
             {
-                id             = meta.id,
-                nombre         = meta.nombre,
-                descripcion    = meta.descripcion,
+                id = meta.id,
+                nombre = meta.nombre,
+                descripcion = meta.descripcion,
                 monto_objetivo = meta.monto_objetivo,
-                monto_actual   = meta.monto_actual,
+                monto_actual = meta.monto_actual,
                 fecha_estimada = meta.fecha_estimada,
-                icono          = meta.icono
+                icono = meta.icono
             });
         }
 
@@ -136,17 +130,15 @@ namespace Gestor.Finanzas.Controllers
 
             var montoActual = vm.monto_actual ?? 0;
             var yaEstabaCompletada = meta.monto_actual >= meta.monto_objetivo;
-            var ahoraEstaCompleta  = montoActual >= vm.monto_objetivo;
+            var ahoraEstaCompleta = montoActual >= vm.monto_objetivo;
 
-            meta.nombre         = vm.nombre;
-            meta.descripcion    = vm.descripcion;
+            meta.nombre = vm.nombre;
+            meta.descripcion = vm.descripcion;
             meta.monto_objetivo = vm.monto_objetivo;
-            meta.monto_actual   = montoActual;
+            meta.monto_actual = montoActual;
             meta.fecha_estimada = vm.fecha_estimada;
-            meta.icono          = string.IsNullOrWhiteSpace(vm.icono) ? "fa-solid fa-piggy-bank" : vm.icono;
+            meta.icono = string.IsNullOrWhiteSpace(vm.icono) ? "fa-solid fa-piggy-bank" : vm.icono;
 
-            // Registra la fecha de cumplimiento la primera vez que se alcanza el objetivo.
-            // Si el monto baja de nuevo (corrección), limpia la fecha.
             if (ahoraEstaCompleta && !yaEstabaCompletada)
                 meta.fecha_cumplimiento = DateTime.Now;
             else if (!ahoraEstaCompleta)
@@ -154,6 +146,40 @@ namespace Gestor.Finanzas.Controllers
 
             db.SaveChanges();
             TempData["Success"] = "Meta actualizada correctamente.";
+            return RedirectToAction("Index");
+        }
+
+        // POST: Metas/AgregarAhorro
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AgregarAhorro(int id, decimal monto)
+        {
+            if (monto <= 0)
+            {
+                TempData["Error"] = "El monto a abonar debe ser mayor a $0.";
+                return RedirectToAction("Index");
+            }
+
+            var meta = db.Metas
+                .FirstOrDefault(m => m.id == id && m.usuario_id == UsuarioActualId);
+
+            if (meta == null) return HttpNotFound();
+
+            var disponible = meta.monto_objetivo - (meta.monto_actual ?? 0);
+
+            if (monto > disponible)
+            {
+                TempData["Error"] = $"El abono supera el objetivo. Solo puedes abonar hasta ${disponible:N2} más.";
+                return RedirectToAction("Index");
+            }
+
+            meta.monto_actual = (meta.monto_actual ?? 0) + monto;
+
+            if (meta.monto_actual >= meta.monto_objetivo && meta.fecha_cumplimiento == null)
+                meta.fecha_cumplimiento = DateTime.Now;
+
+            db.SaveChanges();
+            TempData["Success"] = $"¡Abono de ${monto:N2} registrado en \"{meta.nombre}\"!";
             return RedirectToAction("Index");
         }
 
