@@ -5,7 +5,7 @@
 
 <main class="min-h-screen w-full pt-16">
     <header class="w-full h-fit py-32 flex flex-col text-center items-center
-    bg-gradient-to-t from-purple-950/70 via-gray-950 to-slate-950">
+    bg-gradient-to-t from-purple-950/70 via-gray-950 to-slate-950 max-md:px-4">
         <h1 class="text-white text-4xl md:text-6xl font-bold">Funciones Principales de FinTrack</h1>
         <p class="text-gray-400 text-sm md:text-xl max-w-4xl">Descubre los cuatro pilares tecnológicos que transformarán tu relación con el
         dinero y te darán el control absoluto de tus finanzas personales.</p>
@@ -14,48 +14,94 @@
         <!-- fila 1 -->
         <div class="w-full h-80 hidden md:flex justify-center ">
             <img class="shadow-xl shadow-violet-900 rounded-xl" src="~/content/assets/funcionesIMG1.png" alt="">
-        </div><!--TODO: Reemplazar por imagen-->
+        </div>
         <article class="w-full h-auto flex flex-col gap-4 justify-center">
             <h2 class="text-white text-2xl md:text-4xl">Registro de Transacciones sin Esfuerzo</h2>
+            <img class="shadow-md md:shadow-xl shadow-violet-900 rounded-xl md:hidden" src="~/content/assets/funcionesIMG1.png" alt=""> 
             <p class="text-sm md:text-xl text-gray-400">Diseñado para la velocidad de la vida real. Nuestra interfaz
             intuitiva elimina la fricción administrativa, permitiéndote registrar
             gastos en segundos, ya sea manualmente o escaneando
             recibos al instante.</p>
-            <p class="text-white text-sm md:text-xl font-semibold">Entrada de datos ultrarapida</p>
-            <p class="text-white text-sm md:text-xl font-semibold">Digitalización instantánea de recibos</p>
+            <div class="flex gap-2 items-center">
+                <div class="w-fit h-fit flex p-2 bg-violet-600/50 border border-violet-700 rounded-lg justify-center items-center gap-2 text-violet-400">
+                    <i class="fa-solid fa-bolt-lightning"></i>
+                </div>
+                <p class="text-white text-sm md:text-xl font-semibold">Entrada de datos ultrarapida</p>
+            </div>
+            <div class="flex gap-2 items-center">
+                <div class="w-fit h-fit flex p-2 bg-violet-600/50 border border-violet-700 rounded-lg justify-center items-center gap-2 text-violet-400">
+                    <i class="fa-solid fa-tag"></i>
+                </div>
+                <p class="text-white text-sm md:text-xl font-semibold">Etiquetado automático de transacciones</p>
+            </div>
         </article>
         <!-- fila 2 -->
         <article class="w-full h-auto flex flex-col gap-4 justify-center">
             <h2 class="text-white text-2xl md:text-4xl">Categorización de Gastos</h2>
-            <p class="text-sm md:text-xl text-gray-400">Organiza tus gastos automáticamente en categorías predefinidas o crea tus propias categorías personalizadas para una visión clara de tus hábitos de consumo.</p>
-            <p class="text-white text-sm md:text-xl font-semibold">Personalización de etiquetas según tus hábitos</p>
-            <p class="text-white text-sm md:text-xl font-semibold">Identificación automática de suscripciones</p>
+            <img class="shadow-md md:shadow-xl shadow-violet-900 rounded-xl md:hidden" src="~/content/assets/funcionesIMG2.png" alt=""> 
+            <p class="text-sm md:text-xl text-gray-400">Organiza tus gastos automáticamente en un amplia cantidad de categorías predefinidas para una visión clara de tus hábitos de consumo.</p>
+            <div class="flex gap-2 items-center">
+                <div class="w-fit h-fit flex p-2 bg-violet-600/50 border border-violet-700 rounded-lg justify-center items-center gap-2 text-violet-400">
+                    <i class="fa-regular fa-clipboard"></i>
+                </div>
+            <p class="text-white text-sm md:text-xl font-semibold">Identificación de tipos de transacciones</p>
+            </div>
+            <div class="flex gap-2 items-center">
+                <div class="w-fit h-fit flex p-2 bg-violet-600/50 border border-violet-700 rounded-lg justify-center items-center gap-2 text-violet-400">
+                    <i class="fa-solid fa-chart-simple"></i>
+                </div>
+            <p class="text-white text-sm md:text-xl font-semibold">Fácil visualización de datos</p>
+            </div>
         </article>
         <div class="w-full h-80 hidden md:flex justify-center">
             <img class="shadow-xl shadow-violet-900 rounded-xl" src="~/content/assets/funcionesIMG2.png" alt="">
-        </div><!--TODO: Reemplazar por imagen-->
+        </div>
         <!-- fila 3 -->
         <div class="w-full h-80 hidden md:flex justify-center">
             <img class="shadow-xl shadow-violet-900 rounded-xl" src="~/content/assets/funcionesIMG3.png" alt="">
-        </div><!--TODO: Reemplazar por imagen-->
+        </div>
         <article class="w-full h-auto flex flex-col justify-center gap-4">
             <h2 class="text-white text-2xl md:text-4xl">Visualización Total de Gastos</h2>
+            <img class="shadow-md md:shadow-xl shadow-violet-900 rounded-xl md:hidden" src="~/content/assets/funcionesIMG3.png" alt=""> 
             <p class="text-sm md:text-xl text-gray-400">No más números abstractos Gráficos de alto impacto y
             resúmenes dinámicos que te dicen la verdad sobre tu dinero al
             instante. Identifica fugas de capital y optimiza tu presupuesto
             visualmente.</p>
+            <div class="flex gap-2 items-center">
+                <div class="w-fit h-fit flex p-2 bg-violet-600/50 border border-violet-700 rounded-lg justify-center items-center gap-2 text-violet-400">
+                    <i class="fa-solid fa-chart-pie"></i>
+                </div>
             <p class="text-white text-sm md:text-xl font-semibold">Gráficos de pastel y barras para análisis rápido</p>
+            </div>
+            <div class="flex gap-2 items-center">
+                <div class="w-fit h-fit flex p-2 bg-violet-600/50 border border-violet-700 rounded-lg justify-center items-center gap-2 text-violet-400">
+                    <i class="fa-solid fa-list"></i>
+                </div>
             <p class="text-white text-sm md:text-xl font-semibold">Desglose detallado de gastos por categoría</p>
+            </div>
         </article>
         <!-- fila 4 -->
         <article class="w-full h-auto flex flex-col justify-center gap-4">
-            <h2 class="text-white text-2xl md:text-4xl">Metas de Ahorro Personalizadas</h2>
+            <h2 class="text-white text-2xl md:text-4xl">Metas de Ahorro Personalizadas</h2>            
+                <img class="shadow-md md:shadow-xl shadow-violet-900 rounded-xl md:hidden" src="~/content/assets/funcionesIMG4.png" alt="">           
             <p class="text-sm md:text-xl text-gray-400">Convierte tus sueños en planes tangibles. Establece objetivos financieros claros y observa cómo te acercas a ellos con barras
             de progreso motivadoras y notificaciones de hitos cumplidos.</p>
+            <div class="flex gap-2 items-center">
+                <div class="w-fit h-fit flex p-2 bg-violet-600/50 border border-violet-700 rounded-lg justify-center items-center gap-2 text-violet-400">
+                    <i class="fa-solid fa-bars-progress"></i>
+                </div>
             <p class="text-white text-sm md:text-xl font-semibold">Seguimiento visual del progreso</p>
+            </div>
+            <div class="flex gap-2 items-center">
+                <div class="w-fit h-fit flex p-2 bg-violet-600/50 border border-violet-700 rounded-lg justify-center items-center gap-2 text-violet-400">
+                    <i class="fa-solid fa-sliders"></i>
+                </div>
             <p class="text-white text-sm md:text-xl font-semibold">Reglas de ahorro personalizadas</p>
+            </div>
         </article>
-        <div class="w-full h-80 bg-violet-600 hidden md:flex"></div><!--TODO: Reemplazar por imagen-->
+        <div class="w-full h-80 hidden md:flex justify-center">
+                <img class="shadow-xl shadow-violet-900 rounded-xl" src="~/content/assets/funcionesIMG4.png" alt="">
+        </div>
     </section>
     <footer class="w-full px-4 md:px-12 md:py-12">
         <div class="w-full h-fit px-4 md:px-12 py-8 md:py-24 flex flex-col gap-4 justify-center items-center bg-gradient-to-br from-slate-950 via-purple-950 to-gray-950

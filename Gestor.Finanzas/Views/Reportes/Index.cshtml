@@ -19,14 +19,17 @@
 }
 
 <!-- ═════════ HEADER ═════════ -->
-<header class="border-b border-slate-800 px-6 py-3 flex items-center justify-between gap-4 flex-wrap">
+<header class="max-md:h-fit border-b border-slate-800 px-6 py-3 flex items-center md:justify-between gap-4 flex-wrap">
+    <button class="text-slate-400 hover:text-white transition-colors md:hidden" id="menu-toggle">
+            <i class="fa-solid fa-bars"></i>
+        </button>
     <div>
         <h2 class="text-white text-lg font-semibold">Reportes de Actividad</h2>
         <p class="text-slate-400 text-xs">Análisis visual de tus finanzas</p>
     </div>
 
     <!-- Filtros de período -->
-    <div class="flex items-center gap-2 bg-slate-800 border border-slate-700 rounded-xl p-1">
+    <div class="hidden md:flex items-center gap-2 bg-slate-800 border border-slate-700 rounded-xl p-1">
         <a href="@Url.Action("Index", new { periodo = "mes" })"
            class="@(periodo == "mes" ? tabActive : tabInactive)">
             Mes actual
@@ -39,6 +42,14 @@
            class="@(periodo == "anio" ? tabActive : tabInactive)">
             Este año
         </a>
+    </div>
+    <!-- filtros responsive -->
+    <div class="md:hidden absolute right-6 w-24">
+        <select id="periodo-select" class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white w-full">
+            <option value="mes" @(periodo == "mes" ? "selected" : "")>Mes actual</option>
+            <option value="3meses" @(periodo == "3meses" ? "selected" : "")>Últimos 3 meses</option>
+            <option value="anio" @(periodo == "anio" ? "selected" : "")>Este año</option>
+        </select>
     </div>
 </header>
 

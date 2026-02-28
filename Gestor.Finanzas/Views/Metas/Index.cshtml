@@ -12,19 +12,25 @@
     var proximaMeta = ViewBag.ProximaMeta as Gestor.Finanzas.Models.Meta;
 }
 
-<header class="border-b border-slate-800 px-6 py-3 flex items-center gap-4">
+<header class="max-md:h-fit border-b border-slate-800 px-6 py-3 flex items-center gap-4">
+    <button  class="text-slate-400 hover:text-white transition-colors md:hidden" id="menu-toggle">
+            <i class="fa-solid fa-bars"></i>
+        </button>
     <div class="flex-1">
         <div class="relative max-w-sm">
-            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
-            <input type="text" id="buscarMeta" placeholder="Buscar metas..."
-                   class="w-full bg-slate-800 border border-slate-700 rounded-lg pl-9 pr-4 py-2 text-sm text-slate-300 placeholder-slate-500 focus:outline-none focus:border-violet-500" />
+            <h2 class="text-white font-bold text-xl">Metas de Ahorro</h2>
+            <p class="text-slate-400 text-xs max-md:hidden">Administra tus objetivos financieros</p>
         </div>
     </div>
     <a href="@Url.Action("Create", "Metas")"
-       class="flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors">
+       class="hidden md:flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors">
         <i class="fa-solid fa-plus"></i> Crear Nueva Meta
     </a>
-    <button class="text-slate-400 hover:text-white transition-colors">
+    <a href="@Url.Action("Create", "Metas")"
+       class="hidden max-md:flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors">
+        <i class="fa-solid fa-plus"></i>Nueva Meta
+    </a>
+    <button class="text-slate-400 hover:text-white transition-colors max-md:hidden">
         <i class="fa-regular fa-bell text-lg"></i>
     </button>
 </header>
@@ -226,7 +232,7 @@
 
 <!-- =====================  MODAL ABONAR  ===================== -->
 <div id="modalAhorro"
-     class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
+     class="hidden fixed inset-0 z-50  items-center justify-center p-4"
      onclick="if(event.target===this) cerrarModalAhorro()">
 
     <!-- Fondo oscuro -->
@@ -324,11 +330,13 @@
             document.getElementById('modalMonto').max = disponible;
             document.getElementById('modalError').classList.add('hidden');
             document.getElementById('modalAhorro').classList.remove('hidden');
+            document.getElementById('modalAhorro').classList.add('flex');
             setTimeout(function () { document.getElementById('modalMonto').focus(); }, 100);
         }
 
         function cerrarModalAhorro() {
             document.getElementById('modalAhorro').classList.add('hidden');
+            document.getElementById('modalAhorro').classList.remove('flex');
         }
 
         // Atajos rápidos de monto

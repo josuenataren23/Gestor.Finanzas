@@ -193,15 +193,6 @@
     <Content Include="Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Shared\_DashboardLayout.cshtml" />
     <Content Include="Views\Soporte\Index.cshtml" />
-    <Content Include="Views\Dashboard\views\Dashboard\Index.cshtml" />
-    <Content Include="Views\Dashboard\views\Dashboard\_ViewStart.cshtml" />
-    <Content Include="Views\Dashboard\views\Funciones\Index.cshtml" />
-    <Content Include="Views\Dashboard\views\Home\Index.cshtml" />
-    <Content Include="Views\Dashboard\views\Shared\_DashboardLayout.cshtml" />
-    <Content Include="Views\Dashboard\views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Dashboard\views\Soporte\Index.cshtml" />
-    <Content Include="Views\Dashboard\views\web.config" />
-    <Content Include="Views\Dashboard\views\_ViewStart.cshtml" />
     <Content Include="Views\Transacciones\Index.cshtml" />
     <Content Include="Views\Presupuestos\Index.cshtml" />
     <Content Include="Views\Reportes\Index.cshtml" />
