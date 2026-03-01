@@ -6,41 +6,41 @@
 <main class="min-h-screen max-w-full">
     <header class="relative py-32 text-center overflow-hidden bg-gradient-to-t from-purple-950/70 via-gray-950 to-slate-950">
         <div class="w-full h-fit">
-            <h1 class="text-violet-200 text-7xl font-bold">Centro de Soporte</h1>
-            <p class="text-gray-500 text-xl my-12">¿En qué podemos ayudarte hoy? Busca en nuestra base de conocimiento o explora los temas de ayuda.</p>
+            <h1 class="text-violet-200 text-6xl md:text-7xl font-bold max-md:mb-10">Centro de Soporte</h1>
+            <p class="text-gray-500 text-base md:text-xl my-12 px-4 md:px-0 max-md:hidden">¿En qué podemos ayudarte hoy? Busca en nuestra base de conocimiento o explora los temas de ayuda.</p>
         </div>
         <div>
-            <input type="text" placeholder="¿Cómo podemos ayudarte?" class="shadow-sm focus:outline-none focus:ring-1 w-1/2 p-5 rounded-lg bg-gray-900 text-white placeholder-gray-500  focus:ring-purple-400" />
+            <input type="text" placeholder="¿Cómo podemos ayudarte?" class="shadow-md focus:outline-none focus:ring-1 md:w-1/2 w-10/12 text-base md:text-lg text-center md:text-left p-3 md:p-5 rounded-lg bg-gray-900 text-white placeholder-gray-500  focus:ring-purple-400" />
         </div>
         <div>
-            <p class="text-white/60 text-sm font-light mt-14">Búsquedas populares: <a class="text-purple-400/80 mt-16" href="#">configurar cuenta   -</a> <a class="text-purple-400/80" href="#">   Exportar Excel   -</a> <a class="text-purple-400/80" href="#">Sincronozación bancaria</a></p>
+            <p class="text-white/60 md:text-sm text-xs font-light mt-14 px-5">Búsquedas populares: <a class="text-purple-400/80 mt-16" href="#">configurar cuenta   -</a> <a class="text-purple-400/80" href="#">   Exportar Excel   -</a> <a class="text-purple-400/80" href="#">Sincronozación bancaria</a></p>
         </div>
      </header>
 
-     <section class="w-full h-fit flex justify-center items-center py-20">
-            <div class="w-full h-fit flex max-md:flex-col gap-14 justify-center items-center">
-                <article class="border-gray-800 border-2 rounded-2xl bg-gray-950 p-10 max-md:w-full max-md:h-80 md:size-80">
+     <section class="w-full h-fit flex justify-center items-center md:px-10 py-20 ">
+            <div class="w-full h-fit flex max-md:flex-col md:gap-10 gap-6 justify-center items-center">
+                <article class="border-gray-800 border-2 rounded-2xl bg-gray-950 p-10 md:mx-0 mx-5 md:w-full md:h-80 md:size-80">
                     <div class="w-fit p-6 bg-gradient-to-br from-fuchsia-900/60 to-purple-950/20 rounded-2xl text-xl text-purple-500 mb-4">
                         <i class="fa-solid fa-rocket"></i>
                     </div>
                     <h3 class="text-white text-2xl my-3">Primeros Pasos</h3>
                     <p class="text-gray-400">Arepnde a configurar tu cuenta y realizar tus primeros registros de gastos.</p>
                 </article>
-                <article class="border-gray-800 border-2 rounded-2xl bg-gray-950 p-10 w-full h-80 md:size-80">
+                <article class="border-gray-800 border-2 rounded-2xl bg-gray-950 p-10 md:mx-0 mx-5 md:w-full md:h-80 md:size-80">
                     <div class="w-fit p-6 bg-gradient-to-br from-fuchsia-900/60 to-purple-950/20 rounded-2xl text-xl text-purple-500 mb-4">
                         <i class="fa-solid fa-user-gear"></i>
                     </div>
                     <h3 class="text-white text-2xl my-3">Gestión de Cuentas</h3>
                     <p class="text-gray-400">Administra tus suscripciones, vincula bancos y gestiona tu perfil de usuario.</p>
                 </article>
-                <article class="border-gray-800 border-2 rounded-2xl bg-gray-950 p-10 w-full h-80 md:size-80">
+                <article class="border-gray-800 border-2 rounded-2xl bg-gray-950 p-10 md:mx-0 mx-5 md:w-full md:h-80 md:size-80">
                     <div class="w-fit p-6 bg-gradient-to-br from-fuchsia-900/60 to-purple-950/20 rounded-2xl text-xl text-purple-500 mb-4">
                         <i class="fa-solid fa-shield"></i>
                     </div>
                     <h3 class="text-white text-2xl my-3">Seguridad y Privacidad</h3>
                     <p class="text-gray-400">Información sobre encriptación de datos 2FA y cómo protegemos tus finanzas.</p>
                 </article>
-                <article class="border-gray-800 border-2 rounded-2xl bg-gray-950 p-10 w-full h-80 md:size-80">
+                <article class="border-gray-800 border-2 rounded-2xl bg-gray-950 p-10 md:mx-0 mx-5 md:w-full md:h-80 md:size-80">
                     <div class="w-fit p-6 bg-gradient-to-br from-fuchsia-900/60 to-purple-950/20 rounded-2xl text-xl text-purple-500 mb-4">
                         <i class="fa-solid fa-bug"></i>
                     </div>
@@ -50,26 +50,26 @@
             </div>
         </section>
 
-        <div class="px-20">
+        <div class="md:px-20 px-5">
             <section class="flex flex-col md:flex-row">
                 <div class="w-full md:w-2/3">
                   <div class="flex md:flex-row  items-center">
-                             <div class="w-fit p-4 text-3xl text-purple-500">
+                             <div class="w-fit md:p-4 text-3xl text-purple-500 max-md:hidden">
                                <i class="fa-solid fa-clipboard-question"></i>
                              </div>                            
-                            <h1 class="text-white text-4xl font-semibold">Preguntas Frecuentes</h1>
+                            <h1 class="text-white md:text-4xl text-2xl font-semibold">Preguntas Frecuentes</h1>
                         </div>
                 <ul class="">   
 
                     <li>                                             
                     <details class="group bg-gray-950 p-6 my-6 border-2 border-gray-800 rounded-xl cursor-pointer">
-                        <summary class="flex justify-between items-center text-white text-lg list-none">
+                        <summary class="flex justify-between items-center text-white md:text-lg list-none">
                             <span>¿Cómo puedo exportar mis gastos mensuales a Excel?</span>
                             <span class="transition-transform duration-300 group-open:rotate-180">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                             </span>
                         </summary>
-                        <p class="text-gray-400 py-6 text-xl border-t-2 border-t-gray-800 font-light mt-4">
+                        <p class="text-gray-400 py-6 md:text-xl border-t-2 border-t-gray-800 font-light mt-4">
                         Para exportar tus datos, dirigete a la sección de 'Reportes', selecciona el rango de fechas que deseas
                         y haz clic en el botón 'Exportar' ubicado en la esquina superior derecha. Podrás elegir entre formatos 
                         PDF,CSV y Excel.
@@ -125,9 +125,9 @@
                 </ul>
                 </div>
 
-                <div class="w-full md:w-1/3 pl-8 pt-6">
+                <div class="w-full md:w-1/3 md:pl-8 pt-6">
                 <div>
-                    <h1 class="text-4xl text-white font-semibold">Contacto</h1>
+                    <h1 class="md:text-4xl text-2xl text-white font-semibold">Contacto</h1>
                 </div>
                 <ul>
                     <li class="bg-gradient-to-br from-purple-900/50 to-violet-950/20 px-8 py-14 my-6 border-2 border-gray-800 rounded-xl">
