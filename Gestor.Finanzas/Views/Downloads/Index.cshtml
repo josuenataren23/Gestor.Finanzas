@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewBag.Title = "Descargar";
+}
+
+<main class="min-h-screen max-w-full">
+    <header class="w-full h-fit py-44 flex flex-col justify-center items-center bg-gradient-to-t from-purple-950/70 via-gray-950 to-slate-950 gap-12 px-4 md:px-12">
+        <div class="w-full flex flex-col justify-center items-center gap-8 px-4 md:px-12">
+            <div class="w-fit h-fit px-4 py-2 rounded-full bg-violet-600/25 text-violet-500 border border-violet-500">
+                <h3>Versión 1.1 Multiplataforma</h3>
+            </div>
+            <div class="w-full md:w-2/3 h-fit flex flex-col justify-center items-center gap-4 text-center">
+                <h2 class="text-3xl md:text-6xl font-bold text-white">Lleva Fintrack contigo</h2>
+                <p class="md:text-xl text-gray-400 max-w-xl">Controla tus gastos donde quiera que estes. Sincronización en tiempo real entre tu móvil y tu escritorio.</p>
+            </div>
+        </div>
+    </header>
+    <section class="w-full h-fit flex flex-col justify-center items-center px-4 md:px-12 gap-12 py-12">
+        <div class="w-full h-fit flex flex-col md:flex-row justify-center items-center gap-12 px-4 md:px-12 py-24">
+            <article class="w-full md:w-1/3 h-fit flex flex-col justify-center items-center p-6 gap-6 rounded-lg
+            bg-violet-950/30 border border-gray-500/25">
+                <div class="w-16 h-16 rounded-md bg-purple-500/25 flex justify-center items-center">
+                    <i class="fa-brands fa-apple text-2xl text-purple-500"></i>
+                </div>
+                <div class="w-full flex flex-col items-center gap-2">
+                    <h3 class="text-xl font-semibold text-white">Disponible en iOS</h3>
+                    <p class="text-gray-400 text-sm text-center">Descarga la aplicación para iPhone y mantén tus finanzas al alcance de tu mano.</p>
+                </div>
+                @Html.ActionLink("Descargar para iOS", "DownloadIOS", "Downloads", null, new { @class = "px-4 py-2 rounded-md bg-purple-500 text-white hover:bg-purple-600 transition" })
+            </article>
+            <article class="w-full md:w-1/3 h-fit flex flex-col justify-center items-center p-6 gap-6 rounded-lg
+            bg-violet-950/30 border border-gray-500/25">
+                <div class="w-16 h-16 rounded-md bg-purple-500/25 flex justify-center items-center">
+                    <i class="fa-brands fa-android text-2xl text-purple-500"></i>
+                </div>
+                <div class="w-full flex flex-col items-center gap-2">
+                    <h3 class="text-xl font-semibold text-white">Disponible en Android</h3>
+                    <p class="text-gray-400 text-sm text-center">Lleva el control de tus gastos a donde vayas con nuestra app para Android.</p>
+                </div>
+                @Html.ActionLink("Descargar para Android", "DownloadAndroid", "Downloads", null, new { @class = "px-4 py-2 rounded-md bg-purple-500 text-white hover:bg-purple-600 transition" })
+            </article>
+            <article class="w-full md:w-1/3 h-fit flex flex-col justify-center items-center p-6 gap-6 rounded-lg
+            bg-violet-950/30 border border-gray-500/25">
+                <div class="w-16 h-16 rounded-md bg-purple-500/25 flex justify-center items-center">
+                    <i class="fa-brands fa-windows text-2xl text-purple-500"></i>
+                </div>
+                <div class="w-full flex flex-col items-center gap-2">
+                    <h3 class="text-xl font-semibold text-white">Disponible en Escritorio</h3>
+                    <p class="text-gray-400 text-sm text-center">Descarga la aplicación para Windows 10/11 y gestiona tus finanzas desde tu computadora.</p>
+                </div>
+                @Html.ActionLink("Descargar para Escritorio", "DownloadDesktop", "Downloads", null, new { @class = "px-4 py-2 rounded-md bg-purple-500 text-white hover:bg-purple-600 transition" })
+            </article>
+        </div>
+    </section>
+</main>
+

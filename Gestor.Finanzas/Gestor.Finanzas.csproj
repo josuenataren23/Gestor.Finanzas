@@ -120,6 +120,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\assets\funcionesIMG1.png" />
+    <Content Include="Content\assets\funcionesIMG2.png" />
+    <Content Include="Content\assets\funcionesIMG3.png" />
+    <Content Include="Content\assets\funcionesIMG4.png" />
     <Content Include="Content\assets\google.svg" />
     <Content Include="Content\assets\hero.png" />
     <Content Include="Content\assets\shotsFinTrack.png" />
@@ -152,6 +156,7 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\DownloadsController.cs" />
     <Compile Include="Models\Categoria.cs" />
     <Compile Include="Models\GestorFinanzasModel.cs" />
     <Compile Include="Models\Meta.cs" />
@@ -208,6 +213,10 @@
     <Content Include="Views\Presupuestos\Details.cshtml" />
     <Content Include="Views\Presupuestos\Edit.cshtml" />
     <Content Include="Views\Presupuestos\Delete.cshtml" />
+    <Content Include="Views\Metas\Create.cshtml" />
+    <Content Include="Views\Metas\Delete.cshtml" />
+    <Content Include="Views\Metas\Edit.cshtml" />
+    <Content Include="Views\Downloads\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -5,17 +5,20 @@
 
 <main class="min-h-screen max-w-full">
     <header class="w-full max-md:py-32 md:h-screen px-4 md:px-12 flex gap-12 bg-gradient-to-t from-violet-950/50 via-gray-950 to-black">
-        <div class="w-full md:w-1/2 md:h-screen flex flex-col justify-center">
-            <h1 class="text-white text-4xl md:text-5xl font-bold">Toma el Control de tus Gastos Diarios con Facilidad</h1>
-            <p class="text-white/75 mt-6 text-sm md:text-lg">
-                Fomenta tu conciencia financiera con un seguimiento sencillo y efectivo de tus gastos diarios. Entiende a dónde va tu dinero y toma decisiones informadas para mejorar tu salud financiera.
-            </p>
-            <div class="w-full flex">
-                @Html.ActionLink("Comienza Ahora", "Logout", "Account",null, new { @class = "mt-8 bg-purple-500 rounded-md px-6 py-3 text-black font-semibold hover:bg-purple-600 transition-colors" })
+        <div class="w-full md:w-1/2 h-1/3 md:h-screen flex flex-col justify-between py-32">
+            <div class="w-full h-fit flex flex-col justify-center gap-4">
+                <h1 class="text-white text-4xl md:text-5xl font-bold">Toma el Control de tus Gastos Diarios con Facilidad</h1>
+                <p class="text-white/75 mt-6 text-sm md:text-lg">
+                    Fomenta tu conciencia financiera con un seguimiento sencillo y efectivo de tus gastos diarios. Entiende a dónde va tu dinero y toma decisiones informadas para mejorar tu salud financiera.
+                </p>
+            </div>
+            <div class="w-full flex gap-4 max-md:flex-col max-md:mt-8">
+                @Html.ActionLink("Comienza Ahora", "Login", "Account",null, new { @class = "max-md:w-fit  bg-purple-500 rounded-md px-6 py-3 text-black font-semibold hover:bg-purple-600 transition-colors" })
+                @Html.ActionLink("Descargar la App", "Index", "Downloads",null, new { @class = "max-md:w-fit  bg-transparent border border-purple-500 rounded-md px-6 py-3 text-purple-500 font-semibold hover:bg-purple-600/50 transition-colors" })
             </div>
         </div>
         <div class="w-1/2 md:h-screen  hidden md:flex justify-end items-center">
-            <img src="~/Content/assets/hero.png" alt="Hero Image" class="w-full h-auto object-cover rounded-md shadow-lg shadow-purple-500/25">
+            <img src="~/Content/assets/hero.png" alt="Hero Image" class="w-full object-cover rounded-md shadow-lg shadow-purple-500/25">
         </div>
         
     </header>
@@ -48,12 +51,12 @@
             </article>
         </div>
     </section>
-    <section class="w-full h-fit md:px-12 py-24 flex justify-center items-center">
-        <div class="w-4/5 h-fit md:px-14 py-8 bg-purple-950/50 backdrop-blur-md flex flex-col justify-center items-center rounded-md text-center space-y-6 mb-16 border-gray-800 border-2">
-            <h2 class="text-white text-5xl font-semibold max-w-3xl">¿Listo para cambiar tu relación con el dinero?</h2>
-            <p class="text-white/75 text-xl max-w-xl">Empieza hoy mismo y descubre la tranquilidad que viene con un control financiero efectivo.</p>
+    <footer class="w-full h-fit px-4 md:px-12 md:py-24 flex justify-center items-center">
+        <div class="w-full px-2 md:w-4/5 h-fit md:px-14 py-8 bg-purple-950/50 backdrop-blur-md flex flex-col justify-center items-center rounded-md text-center space-y-6 mb-16 border-gray-800 border-2">
+            <h2 class="text-white text-2xl md:text-5xl font-semibold max-w-3xl">¿Listo para cambiar tu relación con el dinero?</h2>
+            <p class="text-white/75 md:text-xl max-w-xl">Empieza hoy mismo y descubre la tranquilidad que viene con un control financiero efectivo.</p>
             @Html.ActionLink("Comienza Ahora", "Login", "Account", null, new { @class = "mt-8 bg-purple-500 rounded-md px-6 py-3 text-black font-semibold hover:bg-purple-600 transition-colors" })
         </div>
-    </section>
+    </footer>
 </main>
 

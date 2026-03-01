@@ -26,12 +26,12 @@
         <!-- Tarjeta de vista previa de la meta a eliminar -->
         <div class="bg-slate-800 border border-red-900/40 rounded-2xl p-5 mb-6">
 
-            <div class="flex items-center gap-3 mb-4">
+            <div class="flex items-center gap-3 mb-4 overflow-hidden">
                 <div class="w-10 h-10 rounded-xl bg-violet-600/20 flex items-center justify-center flex-shrink-0">
                     <i class="@iconoMeta text-violet-400"></i>
                 </div>
                 <div>
-                    <p class="text-white font-semibold">@Model.nombre</p>
+                    <p class="text-white font-semibold truncate">@Model.nombre</p>
                     @if (!string.IsNullOrEmpty(Model.descripcion))
                     {
                         <p class="text-slate-400 text-xs">@Model.descripcion</p>
